@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import api from '../../servicos/api';
 import styles from './style';
@@ -47,6 +48,15 @@ function aplicarMascaraData(texto) {
   return v;
 }
 
+function parseDataBR(dataBR) {
+  if (!dataBR || dataBR.length !== 10) return new Date();
+  const partes = dataBR.split('/');
+  if (partes.length === 3) {
+    return new Date(`${partes[2]}-${partes[1]}-${partes[0]}T12:00:00Z`);
+  }
+  return new Date();
+}
+
 export default function FormProduto({ navigation, route }) {
   const modo = route.params?.modo || 'incluir';
   const produto = route.params?.produto;
@@ -65,6 +75,15 @@ export default function FormProduto({ navigation, route }) {
   const [emUso, setEmUso] = useState(produto?.emUso ?? true);
   const [imagemUrl, setImagemUrl] = useState(produto?.imagemUrl || '');
   const [salvando, setSalvando] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const onChangeDate = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      const iso = selectedDate.toISOString().slice(0, 10);
+      setDataEntrada(formatarDataParaBR(iso));
+    }
+  };
 
   async function selecionarImagem() {
     const permissao = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -201,8 +220,18 @@ export default function FormProduto({ navigation, route }) {
             keyboardType="numeric"
             maxLength={10}
           />
-          <Ionicons name="calendar-outline" size={20} color="#5A6A85" style={styles.inputIcon} />
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.inputIcon}>
+            <Ionicons name="calendar-outline" size={24} color="#00B4D8" />
+          </TouchableOpacity>
         </View>
+        {showDatePicker && (
+          <DateTimePicker
+            value={parseDataBR(dataEntrada)}
+            mode="date"
+            display="default"
+            onChange={onChangeDate}
+          />
+        )}
       </View>
 
       <Text style={styles.sectionTitle}>Status e imagem</Text>
