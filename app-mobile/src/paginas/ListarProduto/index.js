@@ -200,16 +200,8 @@ export default function ListarProduto({ navigation }) {
 
         <View style={styles.infoRow}>
           <Ionicons name="layers-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
-          <Text style={styles.texto}>Estoque</Text>
-          <View style={styles.estoqueContainer}>
-            <TouchableOpacity style={styles.botaoEstoque} onPress={() => alterarQuantidade(item, -1)}>
-              <Ionicons name="remove" size={18} color="#00B4D8" />
-            </TouchableOpacity>
-            <Text style={styles.textoValorEstoque}>{item.quantidade}</Text>
-            <TouchableOpacity style={styles.botaoEstoque} onPress={() => alterarQuantidade(item, 1)}>
-              <Ionicons name="add" size={18} color="#00B4D8" />
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.texto}>Quantidade</Text>
+          <Text style={styles.textoValor}>{item.quantidade}</Text>
         </View>
 
         <View style={styles.infoRow}>
@@ -261,10 +253,10 @@ export default function ListarProduto({ navigation }) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={lista}
+        data={listaFiltrada}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
-        ListHeaderComponent={renderHeader}
+        ListHeaderComponent={renderHeader()}
         ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
