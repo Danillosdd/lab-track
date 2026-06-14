@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Image } from 'react-native';
 
 import Login from './src/paginas/Login';
+import Cadastro from './src/paginas/Cadastro';
 import ListarProduto from './src/paginas/ListarProduto';
 import FormProduto from './src/paginas/FormProduto';
 
@@ -46,6 +47,11 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={Cadastro}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, Animated } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { auth, signInWithEmailAndPassword } from '../../servicos/firebase';
+import { auth, createUserWithEmailAndPassword } from '../../servicos/firebase';
 import styles from './style';
 
-export default function Login({ navigation }) {
+export default function Cadastro({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,37 +13,40 @@ export default function Login({ navigation }) {
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 800,
+      duration: 500,
       useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
-  async function handleLogin() {
+  async function handleCadastro() {
     if (email === '' || senha === '') {
-      Alert.alert('Atenção', 'Preencha o email e a senha.');
+      Alert.alert('Atenção', 'Preencha o email e a senha para se cadastrar.');
       return;
     }
-    
+
     if (!auth) {
-      Alert.alert('Modo Teste', 'O Firebase não está configurado. Entrando no modo offline.');
-      navigation.replace('ListarMaterial');
+      Alert.alert('Erro', 'Configure as credenciais do Firebase no arquivo src/servicos/firebase.js primeiro.');
       return;
     }
 
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      navigation.replace('ListarMaterial');
+      await createUserWithEmailAndPassword(auth, email, senha);
+      Alert.alert('Sucesso', 'Conta criada com sucesso! Você já pode entrar com suas credenciais.');
+      navigation.goBack(); // Volta para a tela de login
     } catch (error) {
-      Alert.alert('Erro no Login', 'Email ou senha inválidos. Verifique suas credenciais.');
+      Alert.alert('Erro no Cadastro', 'Não foi possível cadastrar. Verifique se o e-mail é válido e a senha tem no mínimo 6 caracteres.');
+    } finally {
       setLoading(false);
     }
-    </Animated.View>
+  }
+
+  return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>
-        <Image source={require('../../../assets/icon.png')} style={styles.logo} />
-        <Text style={styles.appName}>LabTrack</Text>
-        <Text style={styles.subtitle}>Gestão de Inventário de Laboratório</Text>
+      <Animated.View style={[styles.header, { opacity: fadeAnim }]}>
+        <Ionicons name="person-add-outline" size={64} color="#00B4D8" />
+        <Text style={styles.title}>Criar Conta</Text>
+        <Text style={styles.subtitle}>Registre-se para acessar o inventário</Text>
       </Animated.View>
 
       <Animated.View style={[styles.form, { opacity: fadeAnim }]}>
@@ -61,12 +64,12 @@ export default function Login({ navigation }) {
           />
         </View>
 
-        <Text style={styles.label}>Senha de segurança</Text>
+        <Text style={styles.label}>Senha (Mínimo 6 caracteres)</Text>
         <View style={styles.inputContainer}>
           <Ionicons name="lock-closed-outline" size={20} color="#5A6A85" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Sua senha secreta"
+            placeholder="Crie uma senha segura"
             placeholderTextColor="#5A6A85"
             value={senha}
             onChangeText={setSenha}
@@ -75,17 +78,17 @@ export default function Login({ navigation }) {
         </View>
 
         <TouchableOpacity 
-          style={[styles.botaoEntrar, loading && { opacity: 0.7 }]} 
-          onPress={handleLogin} 
+          style={[styles.botaoCadastrar, loading && { opacity: 0.7 }]} 
+          onPress={handleCadastro} 
           activeOpacity={0.8}
           disabled={loading}
         >
-          <Text style={styles.textoBotaoEntrar}>{loading ? 'Acessando...' : 'Entrar no sistema'}</Text>
-          {!loading && <Ionicons name="arrow-forward" size={20} color="#0B1120" />}
+          <Text style={styles.textoBotaoCadastrar}>{loading ? 'Criando conta...' : 'Concluir Cadastro'}</Text>
+          {!loading && <Ionicons name="checkmark-circle-outline" size={20} color="#0B1120" />}
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.botaoCadastrar} onPress={() => navigation.navigate('Cadastro')} activeOpacity={0.8} disabled={loading}>
-          <Text style={styles.textoBotaoCadastrar}>Primeiro acesso? <Text style={{color: '#00B4D8'}}>Criar conta</Text></Text>
+        <TouchableOpacity style={styles.botaoVoltar} onPress={() => navigation.goBack()} activeOpacity={0.8} disabled={loading}>
+          <Text style={styles.textoBotaoVoltar}>Já tem conta? <Text style={{color: '#00B4D8'}}>Fazer login</Text></Text>
         </TouchableOpacity>
       </Animated.View>
     </KeyboardAvoidingView>
