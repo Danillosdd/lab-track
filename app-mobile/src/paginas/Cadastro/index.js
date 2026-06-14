@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Animated } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Animated, Modal, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { auth, createUserWithEmailAndPassword } from '../../servicos/firebase';
 import styles from './style';
@@ -9,7 +9,25 @@ export default function Cadastro({ navigation }) {
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalVisivel, setModalVisivel] = useState(false);
+  const [tituloModal, setTituloModal] = useState('');
+  const [mensagemModal, setMensagemModal] = useState('');
+  const [iconeModal, setIconeModal] = useState('warning-outline');
+  const [corModal, setCorModal] = useState('#FF4D4D');
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+  function mostrarModal(titulo, mensagem, tipo = 'erro') {
+    setTituloModal(titulo);
+    setMensagemModal(mensagem);
+    if (tipo === 'sucesso') {
+      setIconeModal('checkmark-circle-outline');
+      setCorModal('#00C896');
+    } else {
+      setIconeModal('warning-outline');
+      setCorModal('#FF4D4D');
+    }
+    setModalVisivel(true);
+  }
 
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -21,20 +39,23 @@ export default function Cadastro({ navigation }) {
 
   async function handleCadastro() {
     if (email === '' || senha === '') {
-      Alert.alert('Atenção', 'Preencha o email e a senha para se cadastrar.');
+      mostrarModal('Atenção', 'Preencha o email e a senha para se cadastrar.', 'erro');
       return;
     }
 
     if (!auth) {
-      Alert.alert('Erro', 'Configure as credenciais do Firebase no arquivo src/servicos/firebase.js primeiro.');
+      mostrarModal('Erro', 'Configure as credenciais do Firebase no arquivo src/servicos/firebase.js primeiro.', 'erro');
       return;
     }
 
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, senha);
-      Alert.alert('Sucesso', 'Conta criada com sucesso! Você já pode entrar com suas credenciais.');
-      navigation.goBack(); // Volta para a tela de login
+      mostrarModal('Sucesso', 'Conta criada com sucesso! Você já pode entrar com suas credenciais.', 'sucesso');
+      setTimeout(() => {
+        setModalVisivel(false);
+        navigation.goBack();
+      }, 2500);
     } catch (error) {
       console.log("Erro completo Firebase: ", error);
       
@@ -49,7 +70,7 @@ export default function Cadastro({ navigation }) {
         mensagem = error.message; // Mostra o erro real se for outro
       }
       
-      Alert.alert('Erro no Cadastro', mensagem);
+      mostrarModal('Erro no Cadastro', mensagem, 'erro');
     } finally {
       setLoading(false);
     }
@@ -108,6 +129,29 @@ export default function Cadastro({ navigation }) {
           <Text style={styles.textoBotaoVoltar}>Já tem conta? <Text style={{color: '#00B4D8'}}>Fazer login</Text></Text>
         </TouchableOpacity>
       </Animated.View>
+
+      <Modal visible={modalVisivel} transparent animationType="fade" onRequestClose={() => setModalVisivel(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalVisivel(false)}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(11, 17, 32, 0.85)', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+            <TouchableWithoutFeedback>
+              <View style={{ backgroundColor: '#131D35', borderRadius: 20, padding: 24, width: '100%', alignItems: 'center', borderWidth: 1, borderColor: '#1E2D4A' }}>
+                <Ionicons name={iconeModal} size={48} color={corModal} style={{marginBottom: 16}} />
+                <Text style={{ fontSize: 20, fontWeight: '700', color: '#FFFFFF', marginBottom: 8, textAlign: 'center' }}>{tituloModal}</Text>
+                <Text style={{ fontSize: 15, color: '#8899B4', textAlign: 'center', marginBottom: 24, lineHeight: 22 }}>
+                  {mensagemModal}
+                </Text>
+                <TouchableOpacity 
+                  style={{ backgroundColor: '#00B4D8', width: '100%', paddingVertical: 14, borderRadius: 12, alignItems: 'center' }}
+                  onPress={() => setModalVisivel(false)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={{ color: '#0B1120', fontSize: 16, fontWeight: '700' }}>Entendido</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }

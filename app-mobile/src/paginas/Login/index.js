@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, Animated } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, Animated, Modal, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { auth, signInWithEmailAndPassword, onAuthStateChanged } from '../../servicos/firebase';
 import styles from './style';
@@ -9,7 +9,16 @@ export default function Login({ navigation }) {
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalErroVisivel, setModalErroVisivel] = useState(false);
+  const [tituloErro, setTituloErro] = useState('');
+  const [mensagemErro, setMensagemErro] = useState('');
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+  function mostrarErro(titulo, mensagem) {
+    setTituloErro(titulo);
+    setMensagemErro(mensagem);
+    setModalErroVisivel(true);
+  }
 
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -30,13 +39,16 @@ export default function Login({ navigation }) {
 
   async function handleLogin() {
     if (email === '' || senha === '') {
-      Alert.alert('Atenção', 'Preencha o email e a senha.');
+      mostrarErro('Atenção', 'Preencha o email e a senha para continuar.');
       return;
     }
     
     if (!auth) {
-      Alert.alert('Modo Teste', 'O Firebase não está configurado. Entrando no modo offline.');
-      navigation.replace('ListarMaterial');
+      mostrarErro('Modo Teste', 'O Firebase não está configurado. Entrando no modo offline.');
+      setTimeout(() => {
+        setModalErroVisivel(false);
+        navigation.replace('ListarMaterial');
+      }, 2000);
       return;
     }
 
@@ -45,7 +57,7 @@ export default function Login({ navigation }) {
       await signInWithEmailAndPassword(auth, email, senha);
       navigation.replace('ListarMaterial');
     } catch (error) {
-      Alert.alert('Erro no Login', 'Email ou senha inválidos. Verifique suas credenciais.');
+      mostrarErro('Erro no Login', 'Email ou senha inválidos. Verifique suas credenciais e tente novamente.');
       setLoading(false);
     }
   }
@@ -103,6 +115,29 @@ export default function Login({ navigation }) {
           <Text style={styles.textoBotaoCadastrar}>Primeiro acesso? <Text style={{color: '#00B4D8'}}>Criar conta</Text></Text>
         </TouchableOpacity>
       </Animated.View>
+
+      <Modal visible={modalErroVisivel} transparent animationType="fade" onRequestClose={() => setModalErroVisivel(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalErroVisivel(false)}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(11, 17, 32, 0.85)', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+            <TouchableWithoutFeedback>
+              <View style={{ backgroundColor: '#131D35', borderRadius: 20, padding: 24, width: '100%', alignItems: 'center', borderWidth: 1, borderColor: '#1E2D4A' }}>
+                <Ionicons name="warning-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
+                <Text style={{ fontSize: 20, fontWeight: '700', color: '#FFFFFF', marginBottom: 8, textAlign: 'center' }}>{tituloErro}</Text>
+                <Text style={{ fontSize: 15, color: '#8899B4', textAlign: 'center', marginBottom: 24, lineHeight: 22 }}>
+                  {mensagemErro}
+                </Text>
+                <TouchableOpacity 
+                  style={{ backgroundColor: '#00B4D8', width: '100%', paddingVertical: 14, borderRadius: 12, alignItems: 'center' }}
+                  onPress={() => setModalErroVisivel(false)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={{ color: '#0B1120', fontSize: 16, fontWeight: '700' }}>Entendido</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
