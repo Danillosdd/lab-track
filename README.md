@@ -45,10 +45,13 @@ A aplicação trabalha com o objeto `Produto` focado no tema de **Materiais de L
 - [x] Objeto com mais de 5 atributos incluindo texto, numérico, data e booleano.
 - [x] Aplicativo autoral e individual.
 - [x] **Diferencial de Interface:**
-  - Layout dinâmico com feedbacks visuais e interface Dark Mode (modernização "LabTrack").
+  - Layout dinâmico com feedbacks visuais e interface Dark Mode focada em UX moderna (Design Premium "LabTrack").
+  - Sistema de busca em tempo real com barra de pesquisa para filtrar materiais por nome ou setor.
+  - Paginação na listagem (Infinite Scroll) carregando blocos de itens aos poucos para preservar a memória (Smooth Scrolling).
+  - Cálculo automático em tempo real do `Valor Total` do estoque com formatação monetária padrão pt-BR.
   - Uso de componente `Switch` para atributo booleano (`emUso`).
-  - Uso de `Modal DatePicker` nativo para seleção de datas no iOS e Android com máscaras.
-  - Confirmação de segurança via `Alert` ao excluir registros.
+  - Uso de `Modal DatePicker` nativo para seleção de datas no iOS e Android com máscaras dinâmicas.
+  - Modal customizado e elegante para a Confirmação de Exclusão de registros.
   - Seleção nativa de imagens diretamente pela galeria do dispositivo.
 - [x] **Nota Bônus:** Autenticação com usuário e senha usando a base do **Firebase**.
 
@@ -97,7 +100,7 @@ Após o comando, leia o QR Code gerado usando o aplicativo **Expo Go** em seu ce
 2. **Demonstrar a API:** Mostrar o backend rodando e o endpoint retornando um JSON limpo no navegador ou terminal.
 3. **Listagem:** Mostrar a tela de materiais (ou a interface amigável de lista vazia) após o login.
 4. **Inclusão:** Cadastrar um novo material preenchendo todos os tipos de campos. **Destaque importante:** mostre a máscara de data digitando e, em seguida, abra o calendário clicando no ícone (*DatePicker* nativo) para selecionar a data. Por fim, anexe uma foto da galeria.
-5. **Leitura:** Retornar para a lista e mostrar o novo registro renderizado, com contador atualizado.
-6. **Alteração:** Entrar no modo de edição (ícone do lápis) e alterar algum dado.
-7. **Exclusão:** Tocar para deletar e mostrar a tela de **Confirmação (`Alert`)** antes de remover.
-8. **Destaques da UI:** Ressaltar a nova Splash Screen estilizada, o calendário nativo (`DatePicker`), a galeria de imagens e o componente de `Switch`.
+5. **Leitura, Busca e Paginação:** Retornar para a lista e mostrar o novo registro renderizado. Mostre o cálculo do "Valor Total" e digite algo na barra de pesquisa para mostrar o filtro em tempo real.
+6. **Alteração:** Entrar no modo de edição (ícone do lápis) e alterar algum dado (mostre o Valor Total sendo recalculado automaticamente ao alterar o valor unitário).
+7. **Exclusão:** Tocar para deletar e exibir a nova tela de **Modal Customizado** (UI elegante) antes de confirmar a exclusão.
+8. **Destaques da UI/UX:** Ressaltar a Splash Screen estilizada, a fluidez do Scroll (rolagem suave otimizada), o calendário (`DatePicker`), a galeria de imagens e o cálculo instantâneo em Tela.
