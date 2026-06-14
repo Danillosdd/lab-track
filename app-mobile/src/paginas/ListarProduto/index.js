@@ -38,6 +38,24 @@ export default function ListarProduto({ navigation }) {
   const [modalSenhaVisivel, setModalSenhaVisivel] = useState(false);
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
+  const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false);
+
+  // Modal Aviso (Feedback)
+  const [modalAvisoVisivel, setModalAvisoVisivel] = useState(false);
+  const [tituloAviso, setTituloAviso] = useState('');
+  const [mensagemAviso, setMensagemAviso] = useState('');
+  const [iconeAviso, setIconeAviso] = useState('warning-outline');
+  const [corAviso, setCorAviso] = useState('#FF4D4D');
+  const [acaoAviso, setAcaoAviso] = useState(null);
+
+  function mostrarAviso(titulo, mensagem, tipo = 'erro', callback = null) {
+    setTituloAviso(titulo);
+    setMensagemAviso(mensagem);
+    setIconeAviso(tipo === 'sucesso' ? 'checkmark-circle-outline' : 'warning-outline');
+    setCorAviso(tipo === 'sucesso' ? '#00C896' : '#FF4D4D');
+    setAcaoAviso(() => callback);
+    setModalAvisoVisivel(true);
+  }
 
   async function carregarMateriais() {
     setCarregando(true);
@@ -88,11 +106,11 @@ export default function ListarProduto({ navigation }) {
 
   async function handleTrocarSenha() {
     if (novaSenha.length < 6) {
-      Alert.alert('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.');
+      mostrarAviso('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.', 'erro');
       return;
     }
     if (novaSenha !== confirmaSenha) {
-      Alert.alert('Atenção', 'As senhas não conferem.');
+      mostrarAviso('Atenção', 'As senhas não conferem.', 'erro');
       return;
     }
     try {
@@ -101,17 +119,15 @@ export default function ListarProduto({ navigation }) {
         setModalSenhaVisivel(false);
         setNovaSenha('');
         setConfirmaSenha('');
-        Alert.alert('Sucesso', 'Senha alterada com sucesso. Faça login novamente.', [
-          { text: 'OK', onPress: async () => {
-            await signOut(auth);
-            navigation.replace('Login');
-          }}
-        ]);
+        mostrarAviso('Sucesso', 'Senha alterada com sucesso. Faça login novamente.', 'sucesso', async () => {
+          await signOut(auth);
+          navigation.replace('Login');
+        });
       } else {
-        Alert.alert('Erro', 'Você não está logado via Firebase.');
+        mostrarAviso('Erro', 'Você não está logado via Firebase.', 'erro');
       }
     } catch (error) {
-      Alert.alert('Erro', 'Por questões de segurança, faça login novamente antes de tentar trocar a senha.');
+      mostrarAviso('Erro', 'Por questões de segurança, faça login novamente antes de tentar trocar a senha.', 'erro');
     }
   }
 
@@ -424,39 +440,35 @@ export default function ListarProduto({ navigation }) {
                 <Text style={styles.modalTitulo}>Trocar Senha</Text>
                 <Text style={styles.modalTexto}>Digite a nova senha para sua conta (mín. 6 caracteres).</Text>
                 <View style={{ width: '100%', marginTop: 12, marginBottom: 16 }}>
-                  <TextInput
-                    style={{
-                      backgroundColor: '#0F1A2E',
-                      borderWidth: 1,
-                      borderColor: '#1E2D4A',
-                      borderRadius: 10,
-                      padding: 12,
-                      color: '#FFFFFF',
-                      marginBottom: 10,
-                      textAlign: 'center'
-                    }}
-                    placeholder="Nova senha secreta"
-                    placeholderTextColor="#5A6A85"
-                    secureTextEntry
-                    value={novaSenha}
-                    onChangeText={setNovaSenha}
-                  />
-                  <TextInput
-                    style={{
-                      backgroundColor: '#0F1A2E',
-                      borderWidth: 1,
-                      borderColor: '#1E2D4A',
-                      borderRadius: 10,
-                      padding: 12,
-                      color: '#FFFFFF',
-                      textAlign: 'center'
-                    }}
-                    placeholder="Confirmar nova senha"
-                    placeholderTextColor="#5A6A85"
-                    secureTextEntry
-                    value={confirmaSenha}
-                    onChangeText={setConfirmaSenha}
-                  />
+                  <View style={{flexDirection: 'row', alignItems: 'center', backgroundColor: '#0F1A2E', borderWidth: 1, borderColor: '#1E2D4A', borderRadius: 10, marginBottom: 10, paddingHorizontal: 12}}>
+                    <Ionicons name="lock-closed-outline" size={20} color="#5A6A85" style={{marginRight: 10}} />
+                    <TextInput
+                      style={{ flex: 1, paddingVertical: 12, color: '#FFFFFF' }}
+                      placeholder="Nova senha secreta"
+                      placeholderTextColor="#5A6A85"
+                      secureTextEntry={!mostrarNovaSenha}
+                      value={novaSenha}
+                      onChangeText={setNovaSenha}
+                    />
+                    <TouchableOpacity onPress={() => setMostrarNovaSenha(!mostrarNovaSenha)} activeOpacity={0.7} style={{ padding: 4 }}>
+                      <Ionicons name={mostrarNovaSenha ? "eye-off-outline" : "eye-outline"} size={22} color="#5A6A85" />
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={{flexDirection: 'row', alignItems: 'center', backgroundColor: '#0F1A2E', borderWidth: 1, borderColor: '#1E2D4A', borderRadius: 10, paddingHorizontal: 12}}>
+                    <Ionicons name="lock-closed-outline" size={20} color="#5A6A85" style={{marginRight: 10}} />
+                    <TextInput
+                      style={{ flex: 1, paddingVertical: 12, color: '#FFFFFF' }}
+                      placeholder="Confirmar nova senha"
+                      placeholderTextColor="#5A6A85"
+                      secureTextEntry={!mostrarNovaSenha}
+                      value={confirmaSenha}
+                      onChangeText={setConfirmaSenha}
+                    />
+                    <TouchableOpacity onPress={() => setMostrarNovaSenha(!mostrarNovaSenha)} activeOpacity={0.7} style={{ padding: 4 }}>
+                      <Ionicons name={mostrarNovaSenha ? "eye-off-outline" : "eye-outline"} size={22} color="#5A6A85" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <View style={styles.modalBotoes}>
                   <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSenhaVisivel(false)}>
@@ -466,6 +478,37 @@ export default function ListarProduto({ navigation }) {
                     <Text style={[styles.modalBotaoExcluirTextoModal, {color: '#0B1120'}]}>Confirmar</Text>
                   </TouchableOpacity>
                 </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      {/* Modal Aviso Geral */}
+      <Modal visible={modalAvisoVisivel} transparent animationType="fade" onRequestClose={() => {
+        setModalAvisoVisivel(false);
+        if (acaoAviso) acaoAviso();
+      }}>
+        <TouchableWithoutFeedback onPress={() => {
+          setModalAvisoVisivel(false);
+          if (acaoAviso) acaoAviso();
+        }}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.modalContainer, { alignItems: 'center' }]}>
+                <Ionicons name={iconeAviso} size={48} color={corAviso} style={{marginBottom: 16}} />
+                <Text style={styles.modalTitulo}>{tituloAviso}</Text>
+                <Text style={[styles.modalTexto, { textAlign: 'center' }]}>{mensagemAviso}</Text>
+                <TouchableOpacity 
+                  style={{ backgroundColor: '#00B4D8', width: '100%', paddingVertical: 14, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
+                  onPress={() => {
+                    setModalAvisoVisivel(false);
+                    if (acaoAviso) acaoAviso();
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={{ color: '#0B1120', fontSize: 16, fontWeight: '700' }}>Entendido</Text>
+                </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
           </View>
