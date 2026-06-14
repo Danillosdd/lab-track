@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from 'firebase/auth';
 
 // Substitua as informações abaixo pelas credenciais do seu projeto Firebase
 // 1. Crie um projeto em https://console.firebase.google.com/
@@ -25,4 +25,4 @@ try {
   console.warn("Firebase não configurado. Substitua as credenciais no arquivo firebase.js");
 }
 
-export { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword };
+export { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword };

@@ -14,6 +14,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import api from '../../servicos/api';
+import { auth, signOut, updatePassword } from '../../servicos/firebase';
 import styles from './style';
 
 function formatarDataParaBR(dataISO) {
@@ -27,8 +28,14 @@ export default function ListarProduto({ navigation }) {
   const [carregando, setCarregando] = useState(true);
   const [busca, setBusca] = useState('');
   const [pagina, setPagina] = useState(1);
+  const [ordenacao, setOrdenacao] = useState('recentes');
+
+  // Modais
   const [modalExcluirVisivel, setModalExcluirVisivel] = useState(false);
   const [itemParaExcluir, setItemParaExcluir] = useState(null);
+  const [modalSairVisivel, setModalSairVisivel] = useState(false);
+  const [modalSenhaVisivel, setModalSenhaVisivel] = useState(false);
+  const [novaSenha, setNovaSenha] = useState('');
 
   async function carregarMateriais() {
     setCarregando(true);
@@ -67,15 +74,44 @@ export default function ListarProduto({ navigation }) {
     }
   }
 
-  async function alterarQuantidade(item, delta) {
-    const novaQuantidade = Number(item.quantidade) + delta;
-    if (novaQuantidade < 0) return;
+  async function handleLogout() {
+    setModalSairVisivel(false);
     try {
-      await api.put(`/materiais/${item.id}`, { ...item, quantidade: novaQuantidade });
-      carregarMateriais();
-    } catch (error) {
-      Alert.alert('Ops', 'Erro ao atualizar o estoque.');
+      if (auth) await signOut(auth);
+      navigation.replace('Login');
+    } catch(e) {
+      navigation.replace('Login');
     }
+  }
+
+  async function handleTrocarSenha() {
+    if (novaSenha.length < 6) {
+      Alert.alert('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.');
+      return;
+    }
+    try {
+      if (auth && auth.currentUser) {
+        await updatePassword(auth.currentUser, novaSenha);
+        setModalSenhaVisivel(false);
+        setNovaSenha('');
+        Alert.alert('Sucesso', 'Senha alterada com sucesso. Faça login novamente.', [
+          { text: 'OK', onPress: async () => {
+            await signOut(auth);
+            navigation.replace('Login');
+          }}
+        ]);
+      } else {
+        Alert.alert('Erro', 'Você não está logado via Firebase.');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Por questões de segurança, faça login novamente antes de tentar trocar a senha.');
+    }
+  }
+
+  function alternarOrdenacao() {
+    const modos = ['recentes', 'az', 'za', 'maiorValor'];
+    const index = modos.indexOf(ordenacao);
+    setOrdenacao(modos[(index + 1) % modos.length]);
   }
 
   useFocusEffect(
@@ -86,12 +122,24 @@ export default function ListarProduto({ navigation }) {
 
   useEffect(() => {
     setPagina(1);
-  }, [busca]);
+  }, [busca, ordenacao]);
 
-  const listaFiltrada = lista.filter(item => 
+  let listaFiltrada = lista.filter(item => 
     item.descricao.toLowerCase().includes(busca.toLowerCase()) || 
     item.setor.toLowerCase().includes(busca.toLowerCase())
   );
+
+  // Ordenação
+  if (ordenacao === 'az') {
+    listaFiltrada.sort((a, b) => a.descricao.localeCompare(b.descricao));
+  } else if (ordenacao === 'za') {
+    listaFiltrada.sort((a, b) => b.descricao.localeCompare(a.descricao));
+  } else if (ordenacao === 'maiorValor') {
+    listaFiltrada.sort((a, b) => (b.valorUnitario * b.quantidade) - (a.valorUnitario * a.quantidade));
+  } else {
+    // Recentes (menor id ou data desc)
+    listaFiltrada.sort((a, b) => b.id - a.id);
+  }
 
   const listaPaginada = listaFiltrada.slice(0, pagina * 10);
 
@@ -104,7 +152,7 @@ export default function ListarProduto({ navigation }) {
     return (
       <View>
         {/* Barra do topo com logo e info */}
-        <View style={styles.topBar}>
+        <View style={[styles.topBar, {justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}]}>
           <View style={styles.topBarLeft}>
             <Image
               source={require('../../../assets/logo.png')}
@@ -114,6 +162,16 @@ export default function ListarProduto({ navigation }) {
               <Text style={styles.appName}>LabTrack</Text>
               <Text style={styles.appSubtitle}>Controle de inventário</Text>
             </View>
+          </View>
+          
+          {/* Botões Menu */}
+          <View style={{flexDirection: 'row', gap: 15, alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => setModalSenhaVisivel(true)}>
+              <Ionicons name="key-outline" size={24} color="#00B4D8" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalSairVisivel(true)}>
+              <Ionicons name="log-out-outline" size={26} color="#FF4D4D" />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -127,6 +185,19 @@ export default function ListarProduto({ navigation }) {
             value={busca}
             onChangeText={setBusca}
           />
+        </View>
+
+        {/* Ordenação */}
+        <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 16}}>
+          <TouchableOpacity onPress={alternarOrdenacao} style={{flexDirection: 'row', alignItems: 'center', backgroundColor: '#131D35', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: '#1E2D4A'}}>
+            <Ionicons name="filter" size={14} color="#00B4D8" style={{marginRight: 6}} />
+            <Text style={{color: '#00B4D8', fontWeight: '600', fontSize: 13}}>
+              {ordenacao === 'recentes' && 'Ordem: Mais Recentes'}
+              {ordenacao === 'az' && 'Ordem: A-Z'}
+              {ordenacao === 'za' && 'Ordem: Z-A'}
+              {ordenacao === 'maiorValor' && 'Ordem: Maior Valor Total'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* Cards de resumo */}
@@ -288,11 +359,8 @@ export default function ListarProduto({ navigation }) {
         }
       />
 
-      <Modal
-        visible={modalExcluirVisivel}
-        transparent
-        animationType="fade"
-      >
+      {/* Modal Excluir */}
+      <Modal visible={modalExcluirVisivel} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Ionicons name="warning-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
@@ -311,6 +379,53 @@ export default function ListarProduto({ navigation }) {
           </View>
         </View>
       </Modal>
+
+      {/* Modal Sair */}
+      <Modal visible={modalSairVisivel} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Ionicons name="log-out-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
+            <Text style={styles.modalTitulo}>Sair do Aplicativo</Text>
+            <Text style={styles.modalTexto}>Deseja realmente desconectar da sua conta?</Text>
+            <View style={styles.modalBotoes}>
+              <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSairVisivel(false)}>
+                <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalBotaoExcluirModal} onPress={handleLogout}>
+                <Text style={styles.modalBotaoExcluirTextoModal}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal Senha */}
+      <Modal visible={modalSenhaVisivel} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Ionicons name="key-outline" size={48} color="#00B4D8" style={{marginBottom: 16}} />
+            <Text style={styles.modalTitulo}>Trocar Senha</Text>
+            <Text style={styles.modalTexto}>Digite a nova senha para sua conta (mín. 6 caracteres).</Text>
+            <TextInput
+              style={[styles.searchInput, {width: '100%', marginBottom: 16, marginTop: 8, textAlign: 'center', fontWeight: 'bold'}]}
+              placeholder="Nova senha secreta"
+              placeholderTextColor="#5A6A85"
+              secureTextEntry
+              value={novaSenha}
+              onChangeText={setNovaSenha}
+            />
+            <View style={styles.modalBotoes}>
+              <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSenhaVisivel(false)}>
+                <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.modalBotaoExcluirModal, {backgroundColor: '#00B4D8'}]} onPress={handleTrocarSenha}>
+                <Text style={[styles.modalBotaoExcluirTextoModal, {color: '#0B1120'}]}>Confirmar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }

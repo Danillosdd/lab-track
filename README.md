@@ -47,11 +47,11 @@ A aplicação trabalha com o objeto `Produto` focado no tema de **Materiais de L
 - [x] **Diferencial de Interface:**
   - Layout dinâmico com feedbacks visuais e interface Dark Mode focada em UX moderna (Design Premium "LabTrack").
   - Sistema de busca em tempo real com barra de pesquisa para filtrar materiais por nome ou setor.
-  - Paginação na listagem (Infinite Scroll) carregando blocos de itens aos poucos para preservar a memória (Smooth Scrolling).
+  - Paginação na listagem (Infinite Scroll) e botões de Ordenação Dinâmica (A-Z, Mais Recentes, Maior Valor).
   - Cálculo automático em tempo real do `Valor Total` do estoque com formatação monetária padrão pt-BR.
   - Uso de componente `Switch` para atributo booleano (`emUso`).
   - Uso de `Modal DatePicker` nativo para seleção de datas no iOS e Android com máscaras dinâmicas.
-  - Modal customizado e elegante para a Confirmação de Exclusão de registros.
+  - Modais customizados para Confirmação de Exclusão, Logoff e Troca de Senha.
   - Acesso e integração total com os hardwares nativos do dispositivo: **Câmera** (tirar foto na hora) e **Galeria** (selecionar imagem existente).
 - [x] **Nota Bônus:** Autenticação com usuário e senha usando a base do **Firebase**.
 
