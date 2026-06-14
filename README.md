@@ -8,8 +8,11 @@ Aplicativo mobile em React Native (Expo) que consome API RESTful em Spring Boot 
 
 ## Informacoes academicas
 
+- Instituicao: UEG
 - Disciplina: Programacao para Dispositivos Moveis
 - Atividade: Atividade 4 - Aplicativo que Consuma API
+- Professor: Heuber Gustavo Frazao de Lima
+- Aluno: Danillo Araujo de Paiva
 
 ---
 
