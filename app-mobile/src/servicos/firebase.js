@@ -6,12 +6,12 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 // 2. Adicione um app Web e ative a autenticação por Email/Senha
 // 3. Copie o firebaseConfig e cole aqui:
 const firebaseConfig = {
-  apiKey: "COLE_SUA_API_KEY_AQUI",
-  authDomain: "COLE_SEU_AUTH_DOMAIN_AQUI",
-  projectId: "COLE_SEU_PROJECT_ID_AQUI",
-  storageBucket: "COLE_SEU_STORAGE_BUCKET_AQUI",
-  messagingSenderId: "COLE_SEU_SENDER_ID_AQUI",
-  appId: "COLE_SEU_APP_ID_AQUI"
+  apiKey: "AIzaSyDP1_ktapCAZYRKEMCegaouGLaxFs9tsRY",
+  authDomain: "lab-track-ueg.firebaseapp.com",
+  projectId: "lab-track-ueg",
+  storageBucket: "lab-track-ueg.firebasestorage.app",
+  messagingSenderId: "635888953371",
+  appId: "1:635888953371:web:a4340501470f7fe000f0be"
 };
 
 let app;
