@@ -52,7 +52,7 @@ export default function Login({ navigation }) {
           <Ionicons name="mail-outline" size={20} color="#5A6A85" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Ex: profissional@laboratorio.com"
+            placeholder="email@address.com"
             placeholderTextColor="#5A6A85"
             value={email}
             onChangeText={setEmail}

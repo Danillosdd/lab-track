@@ -92,10 +92,11 @@ Após o comando, leia o QR Code gerado usando o aplicativo **Expo Go** em seu ce
 
 ## 🎥 Roteiro Rápido para Apresentação
 
-1. **Demonstrar a API:** Mostrar o backend rodando e o endpoint retornando um JSON limpo no navegador ou terminal.
-2. **Listagem:** Abrir o app e mostrar a tela inicial de materiais (ou a interface amigável de lista vazia).
-3. **Inclusão:** Cadastrar um novo material preenchendo todos os tipos de campos e anexando uma imagem.
-4. **Leitura:** Retornar para a lista e mostrar o novo registro renderizado, com contador atualizado.
-5. **Alteração:** Entrar no modo de edição (ícone do lápis) e alterar algum dado.
-6. **Exclusão:** Tocar para deletar e mostrar a tela de **Confirmação (`Alert`)** antes de remover.
-7. **Destaques da UI:** Ressaltar a galeria de imagens e o componente de `Switch` (para gerir o tipo *Boolean*).
+1. **Autenticação (Bônus Firebase):** Mostrar as telas separadas de Login e Cadastro, registrar um novo usuário e acessá-lo.
+2. **Demonstrar a API:** Mostrar o backend rodando e o endpoint retornando um JSON limpo no navegador ou terminal.
+3. **Listagem:** Mostrar a tela de materiais (ou a interface amigável de lista vazia) após o login.
+4. **Inclusão:** Cadastrar um novo material preenchendo todos os tipos de campos e anexando uma imagem.
+5. **Leitura:** Retornar para a lista e mostrar o novo registro renderizado, com contador atualizado.
+6. **Alteração:** Entrar no modo de edição (ícone do lápis) e alterar algum dado.
+7. **Exclusão:** Tocar para deletar e mostrar a tela de **Confirmação (`Alert`)** antes de remover.
+8. **Destaques da UI:** Ressaltar a galeria de imagens e o componente de `Switch` (para gerir o tipo *Boolean*).
