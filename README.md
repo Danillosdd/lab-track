@@ -51,9 +51,10 @@ A aplicação trabalha com o objeto `Produto` focado no tema de **Materiais de L
   - Cálculo automático em tempo real do `Valor Total` do estoque com formatação monetária padrão pt-BR.
   - Uso de componente `Switch` para atributo booleano (`emUso`).
   - Uso de `Modal DatePicker` nativo para seleção de datas no iOS e Android com máscaras dinâmicas.
-  - Modais customizados para Confirmação de Exclusão, Logoff e Troca de Senha.
+  - Remoção de todos os alertas padrões do sistema: Modais 100% customizados e elegantes (Dark Mode) para todos os feedbacks (Erros de validação, Login, Exclusão, Logoff, Sucesso e Troca de Senha).
+  - Detalhes de UX: Fechamento automático de teclado ao tocar fora dos inputs e Toggle para ocultar/visualizar senha.
   - Acesso e integração total com os hardwares nativos do dispositivo: **Câmera** (tirar foto na hora) e **Galeria** (selecionar imagem existente).
-- [x] **Nota Bônus:** Autenticação com usuário e senha usando a base do **Firebase**.
+- [x] **Nota Bônus:** Autenticação usando a base do **Firebase**, incluindo **Persistência de Sessão Local** (`AsyncStorage`) para re-login automático.
 
 ---
 
@@ -96,10 +97,10 @@ Após o comando, leia o QR Code gerado usando o aplicativo **Expo Go** em seu ce
 
 ## 🎥 Roteiro Rápido para Apresentação
 
-1. **Autenticação (Bônus Firebase):** Mostrar as telas separadas de Login e Cadastro, registrar um novo usuário e acessá-lo.
+1. **Autenticação (Bônus Firebase):** Mostrar as telas de Login e Cadastro. Mostre a validação de erro via modal (ex: senha errada), revele a senha pelo ícone de "olho" e, após conectar, feche o app e abra novamente para provar o "Auto-login" graças à persistência de sessão.
 2. **Demonstrar a API:** Mostrar o backend rodando e o endpoint retornando um JSON limpo no navegador ou terminal.
 3. **Listagem:** Mostrar a tela de materiais (ou a interface amigável de lista vazia) após o login.
-4. **Inclusão:** Cadastrar um novo material preenchendo todos os tipos de campos. **Destaque importante:** mostre a máscara de data digitando e, em seguida, abra o calendário clicando no ícone (*DatePicker* nativo) para selecionar a data. Por fim, anexe uma foto da galeria.
+4. **Inclusão:** Cadastrar um novo material testando os campos. **Destaque:** valide tentando salvar vazio para mostrar o Modal de Erro, mostre a máscara de data digitando e abra o calendário nativo. Por fim, demonstre tirando uma foto diretamente da Câmera.
 5. **Leitura, Busca e Paginação:** Retornar para a lista e mostrar o novo registro renderizado. Mostre o cálculo do "Valor Total" e digite algo na barra de pesquisa para mostrar o filtro em tempo real.
 6. **Alteração:** Entrar no modo de edição (ícone do lápis) e alterar algum dado (mostre o Valor Total sendo recalculado automaticamente ao alterar o valor unitário).
 7. **Exclusão:** Tocar para deletar e exibir a nova tela de **Modal Customizado** (UI elegante) antes de confirmar a exclusão.
