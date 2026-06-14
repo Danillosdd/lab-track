@@ -3,8 +3,10 @@ import {
   Alert,
   FlatList,
   Image,
+  Modal,
   RefreshControl,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,9 +16,18 @@ import { Ionicons } from '@expo/vector-icons';
 import api from '../../servicos/api';
 import styles from './style';
 
+function formatarDataParaBR(dataISO) {
+  if (!dataISO || dataISO.indexOf('-') === -1) return dataISO;
+  const [ano, mes, dia] = dataISO.split('-');
+  return `${dia}/${mes}/${ano}`;
+}
+
 export default function ListarProduto({ navigation }) {
   const [lista, setLista] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [busca, setBusca] = useState('');
+  const [modalExcluirVisivel, setModalExcluirVisivel] = useState(false);
+  const [itemParaExcluir, setItemParaExcluir] = useState(null);
 
   async function carregarMateriais() {
     setCarregando(true);
@@ -40,14 +51,30 @@ export default function ListarProduto({ navigation }) {
   }
 
   function confirmarExclusao(item) {
-    Alert.alert(
-      'Excluir material',
-      `Tem certeza que deseja excluir "${item.descricao}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Excluir', style: 'destructive', onPress: () => excluirMaterial(item.id) },
-      ]
-    );
+    setItemParaExcluir(item);
+    setModalExcluirVisivel(true);
+  }
+
+  async function confirmarEExcluir() {
+    if (!itemParaExcluir) return;
+    try {
+      await api.delete(`/materiais/${itemParaExcluir.id}`);
+      setModalExcluirVisivel(false);
+      carregarMateriais();
+    } catch (error) {
+      Alert.alert('Ops', 'Não consegui excluir este material.');
+    }
+  }
+
+  async function alterarQuantidade(item, delta) {
+    const novaQuantidade = Number(item.quantidade) + delta;
+    if (novaQuantidade < 0) return;
+    try {
+      await api.put(`/materiais/${item.id}`, { ...item, quantidade: novaQuantidade });
+      carregarMateriais();
+    } catch (error) {
+      Alert.alert('Ops', 'Erro ao atualizar o estoque.');
+    }
   }
 
   useFocusEffect(
@@ -56,10 +83,15 @@ export default function ListarProduto({ navigation }) {
     }, [])
   );
 
+  const listaFiltrada = lista.filter(item => 
+    item.descricao.toLowerCase().includes(busca.toLowerCase()) || 
+    item.setor.toLowerCase().includes(busca.toLowerCase())
+  );
+
   // Cálculos dos resumos
-  const totalItens = lista.length;
-  const emUsoCount = lista.filter(i => i.emUso).length;
-  const valorTotal = lista.reduce((sum, i) => sum + (Number(i.valorUnitario) * Number(i.quantidade)), 0);
+  const totalItens = listaFiltrada.length;
+  const emUsoCount = listaFiltrada.filter(i => i.emUso).length;
+  const valorTotal = listaFiltrada.reduce((sum, i) => sum + (Number(i.valorUnitario) * Number(i.quantidade)), 0);
 
   function renderHeader() {
     return (
@@ -76,6 +108,18 @@ export default function ListarProduto({ navigation }) {
               <Text style={styles.appSubtitle}>Controle de inventário</Text>
             </View>
           </View>
+        </View>
+
+        {/* Barra de Busca */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search-outline" size={20} color="#5A6A85" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar por nome ou setor..."
+            placeholderTextColor="#5A6A85"
+            value={busca}
+            onChangeText={setBusca}
+          />
         </View>
 
         {/* Cards de resumo */}
@@ -150,14 +194,22 @@ export default function ListarProduto({ navigation }) {
 
         <View style={styles.infoRow}>
           <Ionicons name="layers-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
-          <Text style={styles.texto}>Quantidade</Text>
-          <Text style={styles.textoValor}>{item.quantidade}</Text>
+          <Text style={styles.texto}>Estoque</Text>
+          <View style={styles.estoqueContainer}>
+            <TouchableOpacity style={styles.botaoEstoque} onPress={() => alterarQuantidade(item, -1)}>
+              <Ionicons name="remove" size={18} color="#00B4D8" />
+            </TouchableOpacity>
+            <Text style={styles.textoValorEstoque}>{item.quantidade}</Text>
+            <TouchableOpacity style={styles.botaoEstoque} onPress={() => alterarQuantidade(item, 1)}>
+              <Ionicons name="add" size={18} color="#00B4D8" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.infoRow}>
           <Ionicons name="calendar-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Entrada</Text>
-          <Text style={styles.textoValor}>{item.dataEntrada}</Text>
+          <Text style={styles.textoValor}>{formatarDataParaBR(item.dataEntrada)}</Text>
         </View>
 
         <View style={styles.divider} />
@@ -219,6 +271,30 @@ export default function ListarProduto({ navigation }) {
           />
         }
       />
+
+      <Modal
+        visible={modalExcluirVisivel}
+        transparent
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Ionicons name="warning-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
+            <Text style={styles.modalTitulo}>Excluir material</Text>
+            <Text style={styles.modalTexto}>
+              Tem certeza que deseja excluir "{itemParaExcluir?.descricao}"? Essa ação não pode ser desfeita.
+            </Text>
+            <View style={styles.modalBotoes}>
+              <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalExcluirVisivel(false)}>
+                <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalBotaoExcluirModal} onPress={confirmarEExcluir}>
+                <Text style={styles.modalBotaoExcluirTextoModal}>Excluir</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

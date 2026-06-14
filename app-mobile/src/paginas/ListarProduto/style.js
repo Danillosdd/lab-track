@@ -306,6 +306,108 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
+  // Barra de Busca
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.inputBorder,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 20,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 10,
+    color: COLORS.text,
+    fontSize: 15,
+  },
+  // Estoque
+  estoqueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  botaoEstoque: {
+    backgroundColor: COLORS.inputBg,
+    borderWidth: 1,
+    borderColor: COLORS.inputBorder,
+    borderRadius: 8,
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textoValorEstoque: {
+    fontSize: 14,
+    color: COLORS.text,
+    fontWeight: '600',
+    minWidth: 20,
+    textAlign: 'center',
+  },
+  // Modal de Exclusao
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContainer: {
+    backgroundColor: COLORS.card,
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+  },
+  modalTitulo: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 10,
+  },
+  modalTexto: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  modalBotoes: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalBotaoCancelar: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: COLORS.inputBg,
+    borderWidth: 1,
+    borderColor: COLORS.inputBorder,
+    alignItems: 'center',
+  },
+  modalBotaoCancelarTexto: {
+    color: COLORS.textSecondary,
+    fontWeight: '600',
+    fontSize: 15,
+  },
+  modalBotaoExcluirModal: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: COLORS.danger,
+    alignItems: 'center',
+  },
+  modalBotaoExcluirTextoModal: {
+    color: '#FFF',
+    fontWeight: '700',
+    fontSize: 15,
+  },
 });
 
 export default styles;
