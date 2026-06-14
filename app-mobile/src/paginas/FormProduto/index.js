@@ -117,6 +117,25 @@ export default function FormProduto({ navigation, route }) {
     }
   }
 
+  async function tirarFoto() {
+    const permissao = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (!permissao.granted) {
+      Alert.alert('Permissão', 'Permita acesso à câmera para tirar a foto.');
+      return;
+    }
+
+    const resultado = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.7,
+    });
+
+    if (!resultado.canceled) {
+      setImagemUrl(resultado.assets[0].uri);
+    }
+  }
+
   const tituloBotao = useMemo(
     () => (modo === 'alterar' ? 'Salvar alterações' : 'Cadastrar material'),
     [modo]
@@ -279,10 +298,16 @@ export default function FormProduto({ navigation, route }) {
 
       <View style={styles.grupo}>
         <Text style={styles.label}>Foto do material</Text>
-        <TouchableOpacity style={styles.botaoImagem} onPress={selecionarImagem}>
-          <Ionicons name="camera-outline" size={20} color="#00B4D8" style={{marginRight: 8}} />
-          <Text style={styles.textoBotaoImagem}>Selecionar imagem da galeria</Text>
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', gap: 8}}>
+          <TouchableOpacity style={[styles.botaoImagem, {flex: 1}]} onPress={tirarFoto}>
+            <Ionicons name="camera" size={20} color="#00B4D8" style={{marginRight: 8}} />
+            <Text style={styles.textoBotaoImagem}>Câmera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.botaoImagem, {flex: 1}]} onPress={selecionarImagem}>
+            <Ionicons name="images" size={20} color="#00B4D8" style={{marginRight: 8}} />
+            <Text style={styles.textoBotaoImagem}>Galeria</Text>
+          </TouchableOpacity>
+        </View>
 
         {imagemUrl ? <Image source={{ uri: imagemUrl }} style={styles.previewImagem} /> : null}
       </View>

@@ -52,7 +52,7 @@ A aplicação trabalha com o objeto `Produto` focado no tema de **Materiais de L
   - Uso de componente `Switch` para atributo booleano (`emUso`).
   - Uso de `Modal DatePicker` nativo para seleção de datas no iOS e Android com máscaras dinâmicas.
   - Modal customizado e elegante para a Confirmação de Exclusão de registros.
-  - Seleção nativa de imagens diretamente pela galeria do dispositivo.
+  - Acesso e integração total com os hardwares nativos do dispositivo: **Câmera** (tirar foto na hora) e **Galeria** (selecionar imagem existente).
 - [x] **Nota Bônus:** Autenticação com usuário e senha usando a base do **Firebase**.
 
 ---
