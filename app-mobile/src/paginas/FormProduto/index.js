@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import api from '../../servicos/api';
 import styles from './style';
@@ -77,8 +77,12 @@ export default function FormProduto({ navigation, route }) {
   const [salvando, setSalvando] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const onChangeDate = (event, selectedDate) => {
+  const hideDatePicker = () => {
     setShowDatePicker(false);
+  };
+
+  const handleConfirm = (selectedDate) => {
+    hideDatePicker();
     if (selectedDate) {
       const iso = selectedDate.toISOString().slice(0, 10);
       setDataEntrada(formatarDataParaBR(iso));
@@ -224,14 +228,15 @@ export default function FormProduto({ navigation, route }) {
             <Ionicons name="calendar-outline" size={24} color="#00B4D8" />
           </TouchableOpacity>
         </View>
-        {showDatePicker && (
-          <DateTimePicker
-            value={parseDataBR(dataEntrada)}
-            mode="date"
-            display="default"
-            onChange={onChangeDate}
-          />
-        )}
+        <DateTimePickerModal
+          isVisible={showDatePicker}
+          mode="date"
+          date={parseDataBR(dataEntrada)}
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          confirmTextIOS="Confirmar"
+          cancelTextIOS="Cancelar"
+        />
       </View>
 
       <Text style={styles.sectionTitle}>Status e imagem</Text>
