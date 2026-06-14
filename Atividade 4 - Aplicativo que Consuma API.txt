@@ -1,0 +1,18 @@
+Atividade 4 - Aplicativo que Consuma API
+
+Desenvolver um aplicativo para a avaliação final da disciplina que contenha as seguintes características:
+Desenvolvido em React native;
+Consuma um backend para a persistência de algum tipo de objeto;
+O backend poderá ser algum que tenha sido produzido em alguma outra disciplina (Ex: Em Prog. Web usamos o Spring boot + JPA)
+O objeto deverá conter ao menos 5 atributos (literal, numérico, data e boolean);
+Aplicativo autoral;
+Trabalho individual.
+Será considerado diferencial o aplicativo que implemente algum tipo de controle que fuja do trivial "caixas de texto", por exemplo: Galeria de imagens, mapas, alertas aos usuários, algum recurso do celular (Câmera, por exemplo)
+
+A avaliação será através da apresentação do seu aplicativo para a turma. Serão avaliados:
+O domínio do código produzido;
+Segurança na apresentação;
+Implementação dos requisitos estabelecidos;
+Complexidade da aplicação;
+Ineditismo da aplicação.
+Como nota bônus, caso você utilize a autenticação com usuário e senha via a base do firebase;
