@@ -36,6 +36,7 @@ export default function ListarProduto({ navigation }) {
   const [modalSairVisivel, setModalSairVisivel] = useState(false);
   const [modalSenhaVisivel, setModalSenhaVisivel] = useState(false);
   const [novaSenha, setNovaSenha] = useState('');
+  const [confirmaSenha, setConfirmaSenha] = useState('');
 
   async function carregarMateriais() {
     setCarregando(true);
@@ -89,11 +90,16 @@ export default function ListarProduto({ navigation }) {
       Alert.alert('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.');
       return;
     }
+    if (novaSenha !== confirmaSenha) {
+      Alert.alert('Atenção', 'As senhas não conferem.');
+      return;
+    }
     try {
       if (auth && auth.currentUser) {
         await updatePassword(auth.currentUser, novaSenha);
         setModalSenhaVisivel(false);
         setNovaSenha('');
+        setConfirmaSenha('');
         Alert.alert('Sucesso', 'Senha alterada com sucesso. Faça login novamente.', [
           { text: 'OK', onPress: async () => {
             await signOut(auth);
@@ -406,14 +412,41 @@ export default function ListarProduto({ navigation }) {
             <Ionicons name="key-outline" size={48} color="#00B4D8" style={{marginBottom: 16}} />
             <Text style={styles.modalTitulo}>Trocar Senha</Text>
             <Text style={styles.modalTexto}>Digite a nova senha para sua conta (mín. 6 caracteres).</Text>
-            <TextInput
-              style={[styles.searchInput, {width: '100%', marginBottom: 16, marginTop: 8, textAlign: 'center', fontWeight: 'bold'}]}
-              placeholder="Nova senha secreta"
-              placeholderTextColor="#5A6A85"
-              secureTextEntry
-              value={novaSenha}
-              onChangeText={setNovaSenha}
-            />
+            <View style={{ width: '100%', marginTop: 12, marginBottom: 16 }}>
+              <TextInput
+                style={{
+                  backgroundColor: '#0F1A2E',
+                  borderWidth: 1,
+                  borderColor: '#1E2D4A',
+                  borderRadius: 10,
+                  padding: 12,
+                  color: '#FFFFFF',
+                  marginBottom: 10,
+                  textAlign: 'center'
+                }}
+                placeholder="Nova senha secreta"
+                placeholderTextColor="#5A6A85"
+                secureTextEntry
+                value={novaSenha}
+                onChangeText={setNovaSenha}
+              />
+              <TextInput
+                style={{
+                  backgroundColor: '#0F1A2E',
+                  borderWidth: 1,
+                  borderColor: '#1E2D4A',
+                  borderRadius: 10,
+                  padding: 12,
+                  color: '#FFFFFF',
+                  textAlign: 'center'
+                }}
+                placeholder="Confirmar nova senha"
+                placeholderTextColor="#5A6A85"
+                secureTextEntry
+                value={confirmaSenha}
+                onChangeText={setConfirmaSenha}
+              />
+            </View>
             <View style={styles.modalBotoes}>
               <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSenhaVisivel(false)}>
                 <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
