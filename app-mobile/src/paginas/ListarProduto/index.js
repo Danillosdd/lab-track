@@ -93,7 +93,7 @@ export default function ListarProduto({ navigation }) {
           <View style={[styles.resumoCard, styles.resumoCard3]}>
             <Ionicons name="cash-outline" size={24} color="#F5A623" style={{marginBottom: 6}} />
             <Text style={styles.resumoNumero}>
-              {valorTotal > 999 ? `${(valorTotal / 1000).toFixed(1)}k` : valorTotal.toFixed(0)}
+              {valorTotal > 999 ? `${(valorTotal / 1000).toFixed(1).replace('.', ',')}k` : valorTotal.toFixed(0)}
             </Text>
             <Text style={styles.resumoLabel}>Valor (R$)</Text>
           </View>
@@ -145,7 +145,7 @@ export default function ListarProduto({ navigation }) {
         <View style={styles.infoRow}>
           <Ionicons name="pricetag-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Valor unitário</Text>
-          <Text style={styles.textoValor}>R$ {Number(item.valorUnitario).toFixed(2)}</Text>
+          <Text style={styles.textoValor}>R$ {Number(item.valorUnitario).toFixed(2).replace('.', ',')}</Text>
         </View>
 
         <View style={styles.infoRow}>

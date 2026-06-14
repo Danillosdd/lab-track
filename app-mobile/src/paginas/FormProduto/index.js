@@ -64,7 +64,7 @@ export default function FormProduto({ navigation, route }) {
   const [descricao, setDescricao] = useState(produto?.descricao || '');
   const [setor, setSetor] = useState(produto?.setor || '');
   const [valorUnitario, setValorUnitario] = useState(
-    produto?.valorUnitario ? String(produto.valorUnitario) : ''
+    produto?.valorUnitario ? String(produto.valorUnitario).replace('.', ',') : ''
   );
   const [quantidade, setQuantidade] = useState(
     produto?.quantidade ? String(produto.quantidade) : ''
@@ -127,7 +127,7 @@ export default function FormProduto({ navigation, route }) {
     const payload = {
       descricao,
       setor,
-      valorUnitario: Number(valorUnitario),
+      valorUnitario: Number(valorUnitario.replace(',', '.')),
       quantidade: Number(quantidade),
       dataEntrada: formatarDataParaISO(dataEntrada),
       emUso,
@@ -195,7 +195,7 @@ export default function FormProduto({ navigation, route }) {
           value={valorUnitario}
           onChangeText={setValorUnitario}
           keyboardType="numeric"
-          placeholder="Ex: 19.90"
+          placeholder="Ex: 19,90"
           placeholderTextColor="#5A6A85"
         />
       </View>
