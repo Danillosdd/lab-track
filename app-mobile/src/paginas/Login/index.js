@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { auth, signInWithEmailAndPassword } from '../../servicos/firebase';
+import { auth, signInWithEmailAndPassword, onAuthStateChanged } from '../../servicos/firebase';
 import styles from './style';
 
 export default function Login({ navigation }) {
@@ -17,7 +17,16 @@ export default function Login({ navigation }) {
       duration: 800,
       useNativeDriver: true,
     }).start();
-  }, [fadeAnim]);
+
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          navigation.replace('ListarMaterial');
+        }
+      });
+      return unsubscribe;
+    }
+  }, [fadeAnim, navigation]);
 
   async function handleLogin() {
     if (email === '' || senha === '') {

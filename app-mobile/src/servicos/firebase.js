@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword, onAuthStateChanged } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Substitua as informações abaixo pelas credenciais do seu projeto Firebase
 // 1. Crie um projeto em https://console.firebase.google.com/
@@ -20,9 +21,11 @@ let auth;
 
 try {
   app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage)
+  });
 } catch (e) {
   console.warn("Firebase não configurado. Substitua as credenciais no arquivo firebase.js");
 }
 
-export { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword };
+export { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword, onAuthStateChanged };
