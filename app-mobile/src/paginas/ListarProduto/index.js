@@ -181,6 +181,12 @@ export default function ListarProduto({ navigation }) {
         </View>
 
         <View style={styles.infoRow}>
+          <Ionicons name="calendar-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
+          <Text style={styles.texto}>Entrada</Text>
+          <Text style={styles.textoValor}>{formatarDataParaBR(item.dataEntrada)}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
           <Ionicons name="location-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Setor</Text>
           <Text style={styles.textoValor}>{item.setor}</Text>
@@ -193,21 +199,15 @@ export default function ListarProduto({ navigation }) {
         </View>
 
         <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
-          <Text style={styles.texto}>Valor total</Text>
-          <Text style={styles.textoValor}>R$ {(Number(item.valorUnitario) * Number(item.quantidade)).toFixed(2).replace('.', ',')}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
           <Ionicons name="layers-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Quantidade</Text>
           <Text style={styles.textoValor}>{item.quantidade}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Ionicons name="calendar-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
-          <Text style={styles.texto}>Entrada</Text>
-          <Text style={styles.textoValor}>{formatarDataParaBR(item.dataEntrada)}</Text>
+          <Ionicons name="cash-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
+          <Text style={styles.texto}>Valor total</Text>
+          <Text style={styles.textoValor}>R$ {(Number(item.valorUnitario) * Number(item.quantidade)).toFixed(2).replace('.', ',')}</Text>
         </View>
 
         <View style={styles.divider} />
