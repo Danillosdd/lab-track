@@ -1,4 +1,4 @@
-# LabTrack
+# LabTrack (Inventário de Laboratório)
 
 <div align="center">
   <img src="docs/icon.png" width="200" />

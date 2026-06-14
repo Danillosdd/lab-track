@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
     borderStyle: 'dashed',
   },
   textoBotaoImagem: {

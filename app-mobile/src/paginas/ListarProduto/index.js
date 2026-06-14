@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 import api from '../../servicos/api';
 import styles from './style';
@@ -80,17 +81,17 @@ export default function ListarProduto({ navigation }) {
         {/* Cards de resumo */}
         <View style={styles.resumoRow}>
           <View style={[styles.resumoCard, styles.resumoCard1]}>
-            <Text style={styles.resumoIcone}>📦</Text>
+            <Ionicons name="cube-outline" size={24} color="#00B4D8" style={{marginBottom: 6}} />
             <Text style={styles.resumoNumero}>{totalItens}</Text>
             <Text style={styles.resumoLabel}>Total</Text>
           </View>
           <View style={[styles.resumoCard, styles.resumoCard2]}>
-            <Text style={styles.resumoIcone}>✅</Text>
+            <Ionicons name="checkmark-circle-outline" size={24} color="#00C896" style={{marginBottom: 6}} />
             <Text style={styles.resumoNumero}>{emUsoCount}</Text>
             <Text style={styles.resumoLabel}>Em uso</Text>
           </View>
           <View style={[styles.resumoCard, styles.resumoCard3]}>
-            <Text style={styles.resumoIcone}>💰</Text>
+            <Ionicons name="cash-outline" size={24} color="#F5A623" style={{marginBottom: 6}} />
             <Text style={styles.resumoNumero}>
               {valorTotal > 999 ? `${(valorTotal / 1000).toFixed(1)}k` : valorTotal.toFixed(0)}
             </Text>
@@ -104,7 +105,8 @@ export default function ListarProduto({ navigation }) {
           onPress={() => navigation.navigate('IncluirMaterial', { modo: 'incluir' })}
           activeOpacity={0.8}
         >
-          <Text style={styles.textoBotaoNovo}>＋  Cadastrar novo material</Text>
+          <Ionicons name="add" size={20} color="#0B1120" style={{marginRight: 6}} />
+          <Text style={styles.textoBotaoNovo}>Cadastrar novo material</Text>
         </TouchableOpacity>
 
         {/* Título da seção */}
@@ -135,25 +137,25 @@ export default function ListarProduto({ navigation }) {
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoIcon}>📍</Text>
+          <Ionicons name="location-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Setor</Text>
           <Text style={styles.textoValor}>{item.setor}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoIcon}>💰</Text>
+          <Ionicons name="pricetag-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Valor unitário</Text>
           <Text style={styles.textoValor}>R$ {Number(item.valorUnitario).toFixed(2)}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoIcon}>📦</Text>
+          <Ionicons name="layers-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Quantidade</Text>
           <Text style={styles.textoValor}>{item.quantidade}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoIcon}>📅</Text>
+          <Ionicons name="calendar-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Entrada</Text>
           <Text style={styles.textoValor}>{item.dataEntrada}</Text>
         </View>
@@ -166,7 +168,8 @@ export default function ListarProduto({ navigation }) {
             onPress={() => navigation.navigate('AlterarMaterial', { produto: item, modo: 'alterar' })}
             activeOpacity={0.7}
           >
-            <Text style={styles.textoBotaoEditar}>✏️  Editar</Text>
+            <Ionicons name="pencil" size={16} color="#F8FAFC" style={{marginRight: 6}} />
+            <Text style={styles.textoBotaoEditar}>Editar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -174,7 +177,8 @@ export default function ListarProduto({ navigation }) {
             onPress={() => confirmarExclusao(item)}
             activeOpacity={0.7}
           >
-            <Text style={styles.textoBotaoExcluir}>🗑️  Excluir</Text>
+            <Ionicons name="trash-outline" size={16} color="#FF4D4D" style={{marginRight: 6}} />
+            <Text style={styles.textoBotaoExcluir}>Excluir</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -186,7 +190,7 @@ export default function ListarProduto({ navigation }) {
     return (
       <View style={styles.emptyContainer}>
         <View style={styles.emptyIconBg}>
-          <Text style={styles.emptyIcon}>🧪</Text>
+          <Ionicons name="flask-outline" size={48} color="#00B4D8" />
         </View>
         <Text style={styles.emptyTitle}>Nenhum material cadastrado</Text>
         <Text style={styles.emptySubtitle}>

@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 
 import api from '../../servicos/api';
 import styles from './style';
@@ -182,7 +183,8 @@ export default function FormProduto({ navigation, route }) {
       <View style={styles.grupo}>
         <Text style={styles.label}>Foto do material</Text>
         <TouchableOpacity style={styles.botaoImagem} onPress={selecionarImagem}>
-          <Text style={styles.textoBotaoImagem}>📷  Selecionar imagem da galeria</Text>
+          <Ionicons name="camera-outline" size={20} color="#00B4D8" style={{marginRight: 8}} />
+          <Text style={styles.textoBotaoImagem}>Selecionar imagem da galeria</Text>
         </TouchableOpacity>
 
         {imagemUrl ? <Image source={{ uri: imagemUrl }} style={styles.previewImagem} /> : null}
