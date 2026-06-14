@@ -106,11 +106,17 @@ export default function ListarProduto({ navigation }) {
 
   async function handleTrocarSenha() {
     if (novaSenha.length < 6) {
-      mostrarAviso('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.', 'erro');
+      setModalSenhaVisivel(false);
+      setTimeout(() => {
+        mostrarAviso('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.', 'erro', () => setModalSenhaVisivel(true));
+      }, 400);
       return;
     }
     if (novaSenha !== confirmaSenha) {
-      mostrarAviso('Atenção', 'As senhas não conferem.', 'erro');
+      setModalSenhaVisivel(false);
+      setTimeout(() => {
+        mostrarAviso('Atenção', 'As senhas não conferem.', 'erro', () => setModalSenhaVisivel(true));
+      }, 400);
       return;
     }
     try {
@@ -119,15 +125,23 @@ export default function ListarProduto({ navigation }) {
         setModalSenhaVisivel(false);
         setNovaSenha('');
         setConfirmaSenha('');
-        mostrarAviso('Sucesso', 'Senha alterada com sucesso. Faça login novamente.', 'sucesso', async () => {
-          await signOut(auth);
-          navigation.replace('Login');
-        });
+        setTimeout(() => {
+          mostrarAviso('Sucesso', 'Senha alterada com sucesso. Faça login novamente.', 'sucesso', async () => {
+            await signOut(auth);
+            navigation.replace('Login');
+          });
+        }, 400);
       } else {
-        mostrarAviso('Erro', 'Você não está logado via Firebase.', 'erro');
+        setModalSenhaVisivel(false);
+        setTimeout(() => {
+          mostrarAviso('Erro', 'Você não está logado via Firebase.', 'erro');
+        }, 400);
       }
     } catch (error) {
-      mostrarAviso('Erro', 'Por questões de segurança, faça login novamente antes de tentar trocar a senha.', 'erro');
+      setModalSenhaVisivel(false);
+      setTimeout(() => {
+        mostrarAviso('Erro', 'Por questões de segurança, faça login novamente antes de tentar trocar a senha.', 'erro');
+      }, 400);
     }
   }
 
@@ -250,7 +264,7 @@ export default function ListarProduto({ navigation }) {
           onPress={() => navigation.navigate('IncluirMaterial', { modo: 'incluir' })}
           activeOpacity={0.8}
         >
-          <Ionicons name="add" size={20} color="#0B1120" style={{marginRight: 6}} />
+          <Ionicons name="add" size={20} color="#FFFFFF" style={{marginRight: 6}} />
           <Text style={styles.textoBotaoNovo}>Cadastrar novo material</Text>
         </TouchableOpacity>
 
