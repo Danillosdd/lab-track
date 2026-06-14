@@ -45,7 +45,7 @@ export default function App() {
         <Stack.Screen
           name="ListarMaterial"
           component={ListarProduto}
-          options={{ title: 'Materiais de Laboratório', headerLeft: () => <LogoHeader /> }}
+          options={{ title: 'LabTrack', headerLeft: () => <LogoHeader /> }}
         />
         <Stack.Screen
           name="IncluirMaterial"

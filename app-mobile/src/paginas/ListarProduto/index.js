@@ -15,7 +15,7 @@ import styles from './style';
 
 export default function ListarProduto({ navigation }) {
   const [lista, setLista] = useState([]);
-  const [carregando, setCarregando] = useState(false);
+  const [carregando, setCarregando] = useState(true);
 
   async function carregarMateriais() {
     setCarregando(true);
@@ -54,6 +54,69 @@ export default function ListarProduto({ navigation }) {
       carregarMateriais();
     }, [])
   );
+
+  // Cálculos dos resumos
+  const totalItens = lista.length;
+  const emUsoCount = lista.filter(i => i.emUso).length;
+  const valorTotal = lista.reduce((sum, i) => sum + (Number(i.valorUnitario) * Number(i.quantidade)), 0);
+
+  function renderHeader() {
+    return (
+      <View>
+        {/* Barra do topo com logo e info */}
+        <View style={styles.topBar}>
+          <View style={styles.topBarLeft}>
+            <Image
+              source={require('../../../assets/icon.png')}
+              style={styles.logo}
+            />
+            <View>
+              <Text style={styles.appName}>LabTrack</Text>
+              <Text style={styles.appSubtitle}>Controle de inventário</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Cards de resumo */}
+        <View style={styles.resumoRow}>
+          <View style={[styles.resumoCard, styles.resumoCard1]}>
+            <Text style={styles.resumoIcone}>📦</Text>
+            <Text style={styles.resumoNumero}>{totalItens}</Text>
+            <Text style={styles.resumoLabel}>Total</Text>
+          </View>
+          <View style={[styles.resumoCard, styles.resumoCard2]}>
+            <Text style={styles.resumoIcone}>✅</Text>
+            <Text style={styles.resumoNumero}>{emUsoCount}</Text>
+            <Text style={styles.resumoLabel}>Em uso</Text>
+          </View>
+          <View style={[styles.resumoCard, styles.resumoCard3]}>
+            <Text style={styles.resumoIcone}>💰</Text>
+            <Text style={styles.resumoNumero}>
+              {valorTotal > 999 ? `${(valorTotal / 1000).toFixed(1)}k` : valorTotal.toFixed(0)}
+            </Text>
+            <Text style={styles.resumoLabel}>Valor (R$)</Text>
+          </View>
+        </View>
+
+        {/* Botão novo material */}
+        <TouchableOpacity
+          style={styles.botaoNovo}
+          onPress={() => navigation.navigate('IncluirMaterial', { modo: 'incluir' })}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.textoBotaoNovo}>＋  Cadastrar novo material</Text>
+        </TouchableOpacity>
+
+        {/* Título da seção */}
+        {totalItens > 0 && (
+          <View style={styles.secaoHeader}>
+            <Text style={styles.secaoTitulo}>Materiais cadastrados</Text>
+            <Text style={styles.secaoContagem}>{totalItens} {totalItens === 1 ? 'item' : 'itens'}</Text>
+          </View>
+        )}
+      </View>
+    );
+  }
 
   function renderItem({ item }) {
     return (
@@ -101,6 +164,7 @@ export default function ListarProduto({ navigation }) {
           <TouchableOpacity
             style={[styles.botao, styles.botaoEditar]}
             onPress={() => navigation.navigate('AlterarMaterial', { produto: item, modo: 'alterar' })}
+            activeOpacity={0.7}
           >
             <Text style={styles.textoBotaoEditar}>✏️  Editar</Text>
           </TouchableOpacity>
@@ -108,6 +172,7 @@ export default function ListarProduto({ navigation }) {
           <TouchableOpacity
             style={[styles.botao, styles.botaoExcluir]}
             onPress={() => confirmarExclusao(item)}
+            activeOpacity={0.7}
           >
             <Text style={styles.textoBotaoExcluir}>🗑️  Excluir</Text>
           </TouchableOpacity>
@@ -116,30 +181,31 @@ export default function ListarProduto({ navigation }) {
     );
   }
 
+  function renderEmpty() {
+    if (carregando) return null;
+    return (
+      <View style={styles.emptyContainer}>
+        <View style={styles.emptyIconBg}>
+          <Text style={styles.emptyIcon}>🧪</Text>
+        </View>
+        <Text style={styles.emptyTitle}>Nenhum material cadastrado</Text>
+        <Text style={styles.emptySubtitle}>
+          Toque em "Cadastrar novo material" para começar a controlar o inventário do seu laboratório.
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.headerArea}>
-        <View>
-          <Text style={styles.headerTitle}>Inventário</Text>
-          <Text style={styles.headerSubtitle}>Materiais de laboratório</Text>
-        </View>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>{lista.length} itens</Text>
-        </View>
-      </View>
-
-      <TouchableOpacity
-        style={styles.botaoNovo}
-        onPress={() => navigation.navigate('IncluirMaterial', { modo: 'incluir' })}
-      >
-        <Text style={styles.textoBotaoNovo}>＋  Novo material</Text>
-      </TouchableOpacity>
-
       <FlatList
         data={lista}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl
             refreshing={carregando}
@@ -147,14 +213,6 @@ export default function ListarProduto({ navigation }) {
             tintColor="#00B4D8"
             colors={['#00B4D8']}
           />
-        }
-        ListEmptyComponent={
-          !carregando ? (
-            <View>
-              <Text style={styles.vazioEmoji}>🧪</Text>
-              <Text style={styles.vazio}>Nenhum material cadastrado ainda.</Text>
-            </View>
-          ) : null
         }
       />
     </View>

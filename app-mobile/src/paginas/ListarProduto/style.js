@@ -15,51 +15,103 @@ const COLORS = {
   textMuted: '#5A6A85',
   inputBg: '#0F1A2E',
   inputBorder: '#1E2D4A',
+  warning: '#F5A623',
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.bg,
-    padding: 16,
   },
-  headerArea: {
+  listContent: {
+    padding: 16,
+    paddingBottom: 40,
+  },
+  
+  // Top Bar
+  topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: 8,
   },
-  headerTitle: {
-    fontSize: 22,
+  topBarLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    marginRight: 12,
+  },
+  appName: {
+    fontSize: 20,
     fontWeight: '800',
     color: COLORS.text,
     letterSpacing: 0.3,
   },
-  headerSubtitle: {
+  appSubtitle: {
     fontSize: 13,
     color: COLORS.textSecondary,
-    marginTop: 2,
+    fontWeight: '500',
   },
-  badge: {
-    backgroundColor: COLORS.accent + '22',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+
+  // Cards de Resumo
+  resumoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    gap: 10,
   },
-  badgeText: {
-    color: COLORS.accent,
-    fontSize: 13,
+  resumoCard: {
+    flex: 1,
+    backgroundColor: COLORS.card,
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    alignItems: 'center',
+  },
+  resumoCard1: {
+    borderTopColor: COLORS.accent,
+    borderTopWidth: 3,
+  },
+  resumoCard2: {
+    borderTopColor: COLORS.success,
+    borderTopWidth: 3,
+  },
+  resumoCard3: {
+    borderTopColor: COLORS.warning,
+    borderTopWidth: 3,
+  },
+  resumoIcone: {
+    fontSize: 20,
+    marginBottom: 6,
+  },
+  resumoNumero: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: COLORS.text,
+    marginBottom: 2,
+  },
+  resumoLabel: {
+    fontSize: 11,
+    color: COLORS.textSecondary,
+    textTransform: 'uppercase',
     fontWeight: '700',
   },
+
+  // Botão Novo
   botaoNovo: {
     backgroundColor: COLORS.accent,
     borderRadius: 14,
-    paddingVertical: 14,
+    paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 18,
+    marginBottom: 28,
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 8,
     ...Platform.select({
       ios: {
         shadowColor: COLORS.accent,
@@ -78,6 +130,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     letterSpacing: 0.5,
   },
+
+  // Seção de Lista
+  secaoHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 14,
+    paddingHorizontal: 4,
+  },
+  secaoTitulo: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  secaoContagem: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    fontWeight: '600',
+  },
+
+  // Item da Lista (Card)
   card: {
     backgroundColor: COLORS.card,
     borderRadius: 16,
@@ -198,17 +271,40 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 13,
   },
-  vazio: {
-    textAlign: 'center',
-    marginTop: 60,
-    color: COLORS.textMuted,
-    fontSize: 15,
+
+  // Estado Vazio
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
   },
-  vazioEmoji: {
-    textAlign: 'center',
+  emptyIconBg: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: COLORS.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+  },
+  emptyIcon: {
     fontSize: 48,
-    marginTop: 40,
-    marginBottom: 12,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
 

@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Materiais de Laboratório",
-    "slug": "materiais-de-laboratorio",
+    "name": "LabTrack",
+    "slug": "labtrack",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#0a1628"
+      "resizeMode": "contain",
+      "backgroundColor": "#0B1120"
     },
     "assetBundlePatterns": [
       "**/*"

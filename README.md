@@ -1,4 +1,4 @@
-# <img src="docs/icon.png" width="48" align="center" /> Materiais de Laboratório
+# <img src="docs/icon.png" width="48" align="center" /> LabTrack
 
 > Controle de Inventário de Materiais de Laboratório
 
