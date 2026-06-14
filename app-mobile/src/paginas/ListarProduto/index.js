@@ -100,7 +100,7 @@ export default function ListarProduto({ navigation }) {
         <View style={styles.topBar}>
           <View style={styles.topBarLeft}>
             <Image
-              source={require('../../../assets/icon.png')}
+              source={require('../../../assets/logo.png')}
               style={styles.logo}
             />
             <View>

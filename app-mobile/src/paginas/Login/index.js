@@ -44,7 +44,7 @@ export default function Login({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>
-        <Image source={require('../../../assets/icon.png')} style={styles.logo} />
+        <Image source={require('../../../assets/logo.png')} style={styles.logo} />
         <Text style={styles.appName}>LabTrack</Text>
         <Text style={styles.subtitle}>Gestão de Inventário de Laboratório</Text>
       </Animated.View>
