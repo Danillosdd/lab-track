@@ -1,12 +1,15 @@
-# <img src="docs/icon.png" width="48" align="center" /> LabTrack
+# LabTrack
 
-> **Controle Inteligente de Inventário de Laboratório**
+<div align="center">
+  <img src="docs/icon.png" width="200" />
+</div>
 
-Projeto desenvolvido para a disciplina de **Programação para Dispositivos Móveis (UEG)**.
+Aplicativo mobile em React Native (Expo) que consome API RESTful em Spring Boot (H2) para gerenciar o inventário e controle de materiais de laboratório.
 
-![Status](https://img.shields.io/badge/Status-Concluído-success)
-![React Native](https://img.shields.io/badge/React_Native-Expo-blue)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-Java_17-green)
+## Informacoes academicas
+
+- Disciplina: Programacao para Dispositivos Moveis
+- Atividade: Atividade 4 - Aplicativo que Consuma API
 
 ---
 
