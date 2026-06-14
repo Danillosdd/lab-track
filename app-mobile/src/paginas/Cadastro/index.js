@@ -36,7 +36,20 @@ export default function Cadastro({ navigation }) {
       Alert.alert('Sucesso', 'Conta criada com sucesso! Você já pode entrar com suas credenciais.');
       navigation.goBack(); // Volta para a tela de login
     } catch (error) {
-      Alert.alert('Erro no Cadastro', 'Não foi possível cadastrar. Verifique se o e-mail é válido e a senha tem no mínimo 6 caracteres.');
+      console.log("Erro completo Firebase: ", error);
+      
+      let mensagem = 'Não foi possível cadastrar.';
+      if (error.code === 'auth/email-already-in-use') {
+        mensagem = 'Este e-mail já está cadastrado!';
+      } else if (error.code === 'auth/invalid-email') {
+        mensagem = 'E-mail inválido.';
+      } else if (error.code === 'auth/weak-password') {
+        mensagem = 'A senha precisa ter pelo menos 6 caracteres.';
+      } else {
+        mensagem = error.message; // Mostra o erro real se for outro
+      }
+      
+      Alert.alert('Erro no Cadastro', mensagem);
     } finally {
       setLoading(false);
     }
