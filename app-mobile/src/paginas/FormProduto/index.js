@@ -170,7 +170,11 @@ export default function FormProduto({ navigation, route }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView 
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.sectionTitle}>Informações básicas</Text>
 
       <View style={styles.grupo}>
