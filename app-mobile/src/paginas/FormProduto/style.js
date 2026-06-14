@@ -52,6 +52,24 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: COLORS.accent,
   },
+  inputContainerIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.inputBg,
+    borderWidth: 1,
+    borderColor: COLORS.inputBorder,
+    borderRadius: 12,
+  },
+  inputWithIcon: {
+    flex: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 13,
+    fontSize: 15,
+    color: COLORS.text,
+  },
+  inputIcon: {
+    paddingRight: 14,
+  },
   linhaSwitch: {
     flexDirection: 'row',
     justifyContent: 'space-between',

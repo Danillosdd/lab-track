@@ -19,6 +19,34 @@ function dataAtualISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function formatarDataParaBR(dataISO) {
+  if (!dataISO) return '';
+  const [ano, mes, dia] = dataISO.split('-');
+  return `${dia}/${mes}/${ano}`;
+}
+
+function formatarDataParaISO(dataBR) {
+  if (!dataBR) return '';
+  const partes = dataBR.split('/');
+  if (partes.length === 3) {
+    const [dia, mes, ano] = partes;
+    return `${ano}-${mes}-${dia}`;
+  }
+  return dataBR;
+}
+
+function aplicarMascaraData(texto) {
+  let v = texto.replace(/\D/g, ''); // Remove o que não for número
+  if (v.length > 8) v = v.slice(0, 8); // Limita a 8 dígitos
+
+  if (v.length >= 5) {
+    v = v.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
+  } else if (v.length >= 3) {
+    v = v.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+  }
+  return v;
+}
+
 export default function FormProduto({ navigation, route }) {
   const modo = route.params?.modo || 'incluir';
   const produto = route.params?.produto;
@@ -31,7 +59,9 @@ export default function FormProduto({ navigation, route }) {
   const [quantidade, setQuantidade] = useState(
     produto?.quantidade ? String(produto.quantidade) : ''
   );
-  const [dataEntrada, setDataEntrada] = useState(produto?.dataEntrada || dataAtualISO());
+  const [dataEntrada, setDataEntrada] = useState(
+    produto?.dataEntrada ? formatarDataParaBR(produto.dataEntrada) : formatarDataParaBR(dataAtualISO())
+  );
   const [emUso, setEmUso] = useState(produto?.emUso ?? true);
   const [imagemUrl, setImagemUrl] = useState(produto?.imagemUrl || '');
   const [salvando, setSalvando] = useState(false);
@@ -66,12 +96,17 @@ export default function FormProduto({ navigation, route }) {
       return;
     }
 
+    if (dataEntrada.length !== 10) {
+      Alert.alert('Atenção', 'Data de entrada inválida (use o formato DD/MM/AAAA).');
+      return;
+    }
+
     const payload = {
       descricao,
       setor,
       valorUnitario: Number(valorUnitario),
       quantidade: Number(quantidade),
-      dataEntrada,
+      dataEntrada: formatarDataParaISO(dataEntrada),
       emUso,
       imagemUrl,
     };
@@ -156,13 +191,18 @@ export default function FormProduto({ navigation, route }) {
 
       <View style={styles.grupo}>
         <Text style={styles.label}>Data de entrada</Text>
-        <TextInput
-          style={styles.input}
-          value={dataEntrada}
-          onChangeText={setDataEntrada}
-          placeholder="AAAA-MM-DD"
-          placeholderTextColor="#5A6A85"
-        />
+        <View style={styles.inputContainerIcon}>
+          <TextInput
+            style={styles.inputWithIcon}
+            value={dataEntrada}
+            onChangeText={(t) => setDataEntrada(aplicarMascaraData(t))}
+            placeholder="DD/MM/AAAA"
+            placeholderTextColor="#5A6A85"
+            keyboardType="numeric"
+            maxLength={10}
+          />
+          <Ionicons name="calendar-outline" size={20} color="#5A6A85" style={styles.inputIcon} />
+        </View>
       </View>
 
       <Text style={styles.sectionTitle}>Status e imagem</Text>
