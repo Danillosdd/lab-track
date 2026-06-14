@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
@@ -366,97 +367,109 @@ export default function ListarProduto({ navigation }) {
       />
 
       {/* Modal Excluir */}
-      <Modal visible={modalExcluirVisivel} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Ionicons name="warning-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
-            <Text style={styles.modalTitulo}>Excluir material</Text>
-            <Text style={styles.modalTexto}>
-              Tem certeza que deseja excluir "{itemParaExcluir?.descricao}"? Essa ação não pode ser desfeita.
-            </Text>
-            <View style={styles.modalBotoes}>
-              <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalExcluirVisivel(false)}>
-                <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.modalBotaoExcluirModal} onPress={confirmarEExcluir}>
-                <Text style={styles.modalBotaoExcluirTextoModal}>Excluir</Text>
-              </TouchableOpacity>
-            </View>
+      <Modal visible={modalExcluirVisivel} transparent animationType="fade" onRequestClose={() => setModalExcluirVisivel(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalExcluirVisivel(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <Ionicons name="warning-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
+                <Text style={styles.modalTitulo}>Excluir material</Text>
+                <Text style={styles.modalTexto}>
+                  Tem certeza que deseja excluir "{itemParaExcluir?.descricao}"? Essa ação não pode ser desfeita.
+                </Text>
+                <View style={styles.modalBotoes}>
+                  <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalExcluirVisivel(false)}>
+                    <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.modalBotaoExcluirModal} onPress={confirmarEExcluir}>
+                    <Text style={styles.modalBotaoExcluirTextoModal}>Excluir</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* Modal Sair */}
-      <Modal visible={modalSairVisivel} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Ionicons name="log-out-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
-            <Text style={styles.modalTitulo}>Sair do Aplicativo</Text>
-            <Text style={styles.modalTexto}>Deseja realmente desconectar da sua conta?</Text>
-            <View style={styles.modalBotoes}>
-              <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSairVisivel(false)}>
-                <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.modalBotaoExcluirModal} onPress={handleLogout}>
-                <Text style={styles.modalBotaoExcluirTextoModal}>Sair</Text>
-              </TouchableOpacity>
-            </View>
+      <Modal visible={modalSairVisivel} transparent animationType="fade" onRequestClose={() => setModalSairVisivel(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalSairVisivel(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <Ionicons name="log-out-outline" size={48} color="#FF4D4D" style={{marginBottom: 16}} />
+                <Text style={styles.modalTitulo}>Sair do Aplicativo</Text>
+                <Text style={styles.modalTexto}>Deseja realmente desconectar da sua conta?</Text>
+                <View style={styles.modalBotoes}>
+                  <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSairVisivel(false)}>
+                    <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.modalBotaoExcluirModal} onPress={handleLogout}>
+                    <Text style={styles.modalBotaoExcluirTextoModal}>Sair</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* Modal Senha */}
-      <Modal visible={modalSenhaVisivel} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Ionicons name="key-outline" size={48} color="#00B4D8" style={{marginBottom: 16}} />
-            <Text style={styles.modalTitulo}>Trocar Senha</Text>
-            <Text style={styles.modalTexto}>Digite a nova senha para sua conta (mín. 6 caracteres).</Text>
-            <View style={{ width: '100%', marginTop: 12, marginBottom: 16 }}>
-              <TextInput
-                style={{
-                  backgroundColor: '#0F1A2E',
-                  borderWidth: 1,
-                  borderColor: '#1E2D4A',
-                  borderRadius: 10,
-                  padding: 12,
-                  color: '#FFFFFF',
-                  marginBottom: 10,
-                  textAlign: 'center'
-                }}
-                placeholder="Nova senha secreta"
-                placeholderTextColor="#5A6A85"
-                secureTextEntry
-                value={novaSenha}
-                onChangeText={setNovaSenha}
-              />
-              <TextInput
-                style={{
-                  backgroundColor: '#0F1A2E',
-                  borderWidth: 1,
-                  borderColor: '#1E2D4A',
-                  borderRadius: 10,
-                  padding: 12,
-                  color: '#FFFFFF',
-                  textAlign: 'center'
-                }}
-                placeholder="Confirmar nova senha"
-                placeholderTextColor="#5A6A85"
-                secureTextEntry
-                value={confirmaSenha}
-                onChangeText={setConfirmaSenha}
-              />
-            </View>
-            <View style={styles.modalBotoes}>
-              <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSenhaVisivel(false)}>
-                <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalBotaoExcluirModal, {backgroundColor: '#00B4D8'}]} onPress={handleTrocarSenha}>
-                <Text style={[styles.modalBotaoExcluirTextoModal, {color: '#0B1120'}]}>Confirmar</Text>
-              </TouchableOpacity>
-            </View>
+      <Modal visible={modalSenhaVisivel} transparent animationType="fade" onRequestClose={() => setModalSenhaVisivel(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalSenhaVisivel(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <Ionicons name="key-outline" size={48} color="#00B4D8" style={{marginBottom: 16}} />
+                <Text style={styles.modalTitulo}>Trocar Senha</Text>
+                <Text style={styles.modalTexto}>Digite a nova senha para sua conta (mín. 6 caracteres).</Text>
+                <View style={{ width: '100%', marginTop: 12, marginBottom: 16 }}>
+                  <TextInput
+                    style={{
+                      backgroundColor: '#0F1A2E',
+                      borderWidth: 1,
+                      borderColor: '#1E2D4A',
+                      borderRadius: 10,
+                      padding: 12,
+                      color: '#FFFFFF',
+                      marginBottom: 10,
+                      textAlign: 'center'
+                    }}
+                    placeholder="Nova senha secreta"
+                    placeholderTextColor="#5A6A85"
+                    secureTextEntry
+                    value={novaSenha}
+                    onChangeText={setNovaSenha}
+                  />
+                  <TextInput
+                    style={{
+                      backgroundColor: '#0F1A2E',
+                      borderWidth: 1,
+                      borderColor: '#1E2D4A',
+                      borderRadius: 10,
+                      padding: 12,
+                      color: '#FFFFFF',
+                      textAlign: 'center'
+                    }}
+                    placeholder="Confirmar nova senha"
+                    placeholderTextColor="#5A6A85"
+                    secureTextEntry
+                    value={confirmaSenha}
+                    onChangeText={setConfirmaSenha}
+                  />
+                </View>
+                <View style={styles.modalBotoes}>
+                  <TouchableOpacity style={styles.modalBotaoCancelar} onPress={() => setModalSenhaVisivel(false)}>
+                    <Text style={styles.modalBotaoCancelarTexto}>Cancelar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.modalBotaoExcluirModal, {backgroundColor: '#00B4D8'}]} onPress={handleTrocarSenha}>
+                    <Text style={[styles.modalBotaoExcluirTextoModal, {color: '#0B1120'}]}>Confirmar</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
     </View>
