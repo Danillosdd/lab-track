@@ -11,10 +11,10 @@
   </parent>
 
   <groupId>com.ueg</groupId>
-  <artifactId>atividade4-backend</artifactId>
+  <artifactId>labtrack-backend</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>atividade4-backend</name>
-  <description>Backend da Atividade 4 de Programacao para Dispositivos Moveis</description>
+  <name>labtrack-backend</name>
+  <description>Backend do aplicativo LabTrack</description>
 
   <properties>
     <java.version>17</java.version>
