@@ -49,6 +49,7 @@ A aplicação trabalha com o objeto `Produto` focado no tema de **Materiais de L
   - Uso de componente `Switch` para atributo booleano (`emUso`).
   - Confirmação de segurança via `Alert` ao excluir registros.
   - Seleção nativa de imagens diretamente pela galeria do dispositivo.
+- [x] **Nota Bônus:** Autenticação com usuário e senha usando a base do **Firebase**.
 
 ---
 

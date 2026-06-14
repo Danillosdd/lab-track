@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'react-native';
 
+import Login from './src/paginas/Login';
 import ListarProduto from './src/paginas/ListarProduto';
 import FormProduto from './src/paginas/FormProduto';
 
@@ -23,7 +24,7 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="light" />
       <Stack.Navigator
-        initialRouteName="ListarMaterial"
+        initialRouteName="Login"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#0B1120',
@@ -42,6 +43,11 @@ export default function App() {
           cardStyle: { backgroundColor: '#0B1120' },
         }}
       >
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="ListarMaterial"
           component={ListarProduto}
