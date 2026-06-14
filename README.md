@@ -45,8 +45,9 @@ A aplicação trabalha com o objeto `Produto` focado no tema de **Materiais de L
 - [x] Objeto com mais de 5 atributos incluindo texto, numérico, data e booleano.
 - [x] Aplicativo autoral e individual.
 - [x] **Diferencial de Interface:**
-  - Layout dinâmico com feedbacks visuais (modernização "LabTrack").
+  - Layout dinâmico com feedbacks visuais e interface Dark Mode (modernização "LabTrack").
   - Uso de componente `Switch` para atributo booleano (`emUso`).
+  - Uso de `Modal DatePicker` nativo para seleção de datas no iOS e Android com máscaras.
   - Confirmação de segurança via `Alert` ao excluir registros.
   - Seleção nativa de imagens diretamente pela galeria do dispositivo.
 - [x] **Nota Bônus:** Autenticação com usuário e senha usando a base do **Firebase**.
@@ -95,8 +96,8 @@ Após o comando, leia o QR Code gerado usando o aplicativo **Expo Go** em seu ce
 1. **Autenticação (Bônus Firebase):** Mostrar as telas separadas de Login e Cadastro, registrar um novo usuário e acessá-lo.
 2. **Demonstrar a API:** Mostrar o backend rodando e o endpoint retornando um JSON limpo no navegador ou terminal.
 3. **Listagem:** Mostrar a tela de materiais (ou a interface amigável de lista vazia) após o login.
-4. **Inclusão:** Cadastrar um novo material preenchendo todos os tipos de campos e anexando uma imagem.
+4. **Inclusão:** Cadastrar um novo material preenchendo todos os tipos de campos. **Destaque importante:** mostre a máscara de data digitando e, em seguida, abra o calendário clicando no ícone (*DatePicker* nativo) para selecionar a data. Por fim, anexe uma foto da galeria.
 5. **Leitura:** Retornar para a lista e mostrar o novo registro renderizado, com contador atualizado.
 6. **Alteração:** Entrar no modo de edição (ícone do lápis) e alterar algum dado.
 7. **Exclusão:** Tocar para deletar e mostrar a tela de **Confirmação (`Alert`)** antes de remover.
-8. **Destaques da UI:** Ressaltar a galeria de imagens e o componente de `Switch` (para gerir o tipo *Boolean*).
+8. **Destaques da UI:** Ressaltar a nova Splash Screen estilizada, o calendário nativo (`DatePicker`), a galeria de imagens e o componente de `Switch`.
