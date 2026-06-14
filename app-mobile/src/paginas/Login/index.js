@@ -38,7 +38,9 @@ export default function Login({ navigation }) {
       Alert.alert('Erro no Login', 'Email ou senha inválidos. Verifique suas credenciais.');
       setLoading(false);
     }
-    </Animated.View>
+  }
+
+  return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>
         <Image source={require('../../../assets/icon.png')} style={styles.logo} />
