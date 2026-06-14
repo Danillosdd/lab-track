@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Alert,
   FlatList,
@@ -26,6 +26,7 @@ export default function ListarProduto({ navigation }) {
   const [lista, setLista] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [busca, setBusca] = useState('');
+  const [pagina, setPagina] = useState(1);
   const [modalExcluirVisivel, setModalExcluirVisivel] = useState(false);
   const [itemParaExcluir, setItemParaExcluir] = useState(null);
 
@@ -83,10 +84,16 @@ export default function ListarProduto({ navigation }) {
     }, [])
   );
 
+  useEffect(() => {
+    setPagina(1);
+  }, [busca]);
+
   const listaFiltrada = lista.filter(item => 
     item.descricao.toLowerCase().includes(busca.toLowerCase()) || 
     item.setor.toLowerCase().includes(busca.toLowerCase())
   );
+
+  const listaPaginada = listaFiltrada.slice(0, pagina * 10);
 
   // Cálculos dos resumos
   const totalItens = listaFiltrada.length;
@@ -253,7 +260,7 @@ export default function ListarProduto({ navigation }) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={listaFiltrada}
+        data={listaPaginada}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader()}
@@ -265,6 +272,12 @@ export default function ListarProduto({ navigation }) {
         maxToRenderPerBatch={5}
         windowSize={5}
         removeClippedSubviews={true}
+        onEndReached={() => {
+          if (pagina * 10 < listaFiltrada.length) {
+            setPagina(pagina + 1);
+          }
+        }}
+        onEndReachedThreshold={0.5}
         refreshControl={
           <RefreshControl
             refreshing={carregando}

@@ -189,6 +189,33 @@ export default function FormProduto({ navigation, route }) {
       </View>
 
       <View style={styles.grupo}>
+        <Text style={styles.label}>Data de entrada</Text>
+        <View style={styles.inputContainerIcon}>
+          <TextInput
+            style={styles.inputWithIcon}
+            value={dataEntrada}
+            onChangeText={(t) => setDataEntrada(aplicarMascaraData(t))}
+            placeholder="DD/MM/AAAA"
+            placeholderTextColor="#5A6A85"
+            keyboardType="numeric"
+            maxLength={10}
+          />
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.inputIcon}>
+            <Ionicons name="calendar-outline" size={24} color="#00B4D8" />
+          </TouchableOpacity>
+        </View>
+        <DateTimePickerModal
+          isVisible={showDatePicker}
+          mode="date"
+          date={parseDataBR(dataEntrada)}
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          confirmTextIOS="Confirmar"
+          cancelTextIOS="Cancelar"
+        />
+      </View>
+
+      <View style={styles.grupo}>
         <Text style={styles.label}>Setor</Text>
         <TextInput
           style={styles.input}
@@ -232,33 +259,6 @@ export default function FormProduto({ navigation, route }) {
           value={total}
           editable={false}
           placeholderTextColor="#5A6A85"
-        />
-      </View>
-
-      <View style={styles.grupo}>
-        <Text style={styles.label}>Data de entrada</Text>
-        <View style={styles.inputContainerIcon}>
-          <TextInput
-            style={styles.inputWithIcon}
-            value={dataEntrada}
-            onChangeText={(t) => setDataEntrada(aplicarMascaraData(t))}
-            placeholder="DD/MM/AAAA"
-            placeholderTextColor="#5A6A85"
-            keyboardType="numeric"
-            maxLength={10}
-          />
-          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.inputIcon}>
-            <Ionicons name="calendar-outline" size={24} color="#00B4D8" />
-          </TouchableOpacity>
-        </View>
-        <DateTimePickerModal
-          isVisible={showDatePicker}
-          mode="date"
-          date={parseDataBR(dataEntrada)}
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-          confirmTextIOS="Confirmar"
-          cancelTextIOS="Cancelar"
         />
       </View>
 
