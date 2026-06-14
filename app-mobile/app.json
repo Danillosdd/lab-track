@@ -1,16 +1,27 @@
 {
   "expo": {
-    "name": "Atividade4App",
-    "slug": "atividade4-app",
+    "name": "Materiais de Laboratório",
+    "slug": "materiais-de-laboratorio",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#0a1628"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true
     },
-    "android": {},
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
     "web": {
       "bundler": "metro"
     }
