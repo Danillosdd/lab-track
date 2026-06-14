@@ -8,6 +8,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Modal,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -77,6 +80,22 @@ export default function FormProduto({ navigation, route }) {
   const [salvando, setSalvando] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const [modalAvisoVisivel, setModalAvisoVisivel] = useState(false);
+  const [tituloAviso, setTituloAviso] = useState('');
+  const [mensagemAviso, setMensagemAviso] = useState('');
+  const [iconeAviso, setIconeAviso] = useState('warning-outline');
+  const [corAviso, setCorAviso] = useState('#FF4D4D');
+  const [acaoAviso, setAcaoAviso] = useState(null);
+
+  function mostrarAviso(titulo, mensagem, tipo = 'erro', callback = null) {
+    setTituloAviso(titulo);
+    setMensagemAviso(mensagem);
+    setIconeAviso(tipo === 'sucesso' ? 'checkmark-circle-outline' : 'warning-outline');
+    setCorAviso(tipo === 'sucesso' ? '#00C896' : '#FF4D4D');
+    setAcaoAviso(() => callback);
+    setModalAvisoVisivel(true);
+  }
+
   const total = useMemo(() => {
     const val = Number(valorUnitario.replace(',', '.'));
     const qtd = Number(quantidade);
@@ -102,7 +121,7 @@ export default function FormProduto({ navigation, route }) {
     const permissao = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissao.granted) {
-      Alert.alert('Permissão', 'Permita acesso à galeria para selecionar a foto.');
+      mostrarAviso('Permissão', 'Permita acesso à galeria para selecionar a foto.', 'erro');
       return;
     }
 
@@ -121,7 +140,7 @@ export default function FormProduto({ navigation, route }) {
     const permissao = await ImagePicker.requestCameraPermissionsAsync();
 
     if (!permissao.granted) {
-      Alert.alert('Permissão', 'Permita acesso à câmera para tirar a foto.');
+      mostrarAviso('Permissão', 'Permita acesso à câmera para tirar a foto.', 'erro');
       return;
     }
 
@@ -143,12 +162,12 @@ export default function FormProduto({ navigation, route }) {
 
   async function salvar() {
     if (!descricao || !setor || !valorUnitario || !quantidade || !dataEntrada) {
-      Alert.alert('Atenção', 'Preencha todos os campos antes de salvar.');
+      mostrarAviso('Atenção', 'Preencha todos os campos antes de salvar.', 'erro');
       return;
     }
 
     if (dataEntrada.length !== 10) {
-      Alert.alert('Atenção', 'Data de entrada inválida (use o formato DD/MM/AAAA).');
+      mostrarAviso('Atenção', 'Data de entrada inválida (use o formato DD/MM/AAAA).', 'erro');
       return;
     }
 
@@ -163,12 +182,12 @@ export default function FormProduto({ navigation, route }) {
     };
 
     if (Number.isNaN(payload.valorUnitario) || Number.isNaN(payload.quantidade)) {
-      Alert.alert('Atenção', 'Valor unitário e quantidade precisam ser numéricos.');
+      mostrarAviso('Atenção', 'Valor unitário e quantidade precisam ser numéricos.', 'erro');
       return;
     }
 
     if (payload.valorUnitario <= 0 || payload.quantidade < 0) {
-      Alert.alert('Atenção', 'Informe valores válidos para valor unitário e quantidade.');
+      mostrarAviso('Atenção', 'Informe valores válidos para valor unitário e quantidade.', 'erro');
       return;
     }
 
@@ -176,19 +195,20 @@ export default function FormProduto({ navigation, route }) {
     try {
       if (modo === 'alterar' && produto?.id) {
         await api.put(`/materiais/${produto.id}`, payload);
+        mostrarAviso('Sucesso', 'Material atualizado com sucesso!', 'sucesso', () => navigation.goBack());
       } else {
         await api.post('/materiais', payload);
+        mostrarAviso('Sucesso', 'Material cadastrado com sucesso!', 'sucesso', () => navigation.goBack());
       }
-
-      navigation.goBack();
     } catch (error) {
-      Alert.alert('Ops', 'Não foi possível salvar o material agora.');
+      mostrarAviso('Ops', 'Não foi possível salvar o material agora.', 'erro');
     } finally {
       setSalvando(false);
     }
   }
 
   return (
+    <>
     <ScrollView 
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
@@ -320,5 +340,35 @@ export default function FormProduto({ navigation, route }) {
         <Text style={styles.textoBotao}>{salvando ? 'Salvando...' : tituloBotao}</Text>
       </TouchableOpacity>
     </ScrollView>
+      <Modal visible={modalAvisoVisivel} transparent animationType="fade" onRequestClose={() => {
+        setModalAvisoVisivel(false);
+        if (acaoAviso) acaoAviso();
+      }}>
+        <TouchableWithoutFeedback onPress={() => {
+          setModalAvisoVisivel(false);
+          if (acaoAviso) acaoAviso();
+        }}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(11, 17, 32, 0.85)', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+            <TouchableWithoutFeedback>
+              <View style={{ backgroundColor: '#131D35', borderRadius: 20, padding: 24, width: '100%', alignItems: 'center', borderWidth: 1, borderColor: '#1E2D4A' }}>
+                <Ionicons name={iconeAviso} size={48} color={corAviso} style={{marginBottom: 16}} />
+                <Text style={{ fontSize: 20, fontWeight: '700', color: '#FFFFFF', marginBottom: 8, textAlign: 'center' }}>{tituloAviso}</Text>
+                <Text style={{ fontSize: 15, color: '#8899B4', textAlign: 'center', marginBottom: 24, lineHeight: 22 }}>{mensagemAviso}</Text>
+                <TouchableOpacity 
+                  style={{ backgroundColor: '#00B4D8', width: '100%', paddingVertical: 14, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
+                  onPress={() => {
+                    setModalAvisoVisivel(false);
+                    if (acaoAviso) acaoAviso();
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={{ color: '#0B1120', fontSize: 16, fontWeight: '700' }}>Entendido</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </>
   );
 }
