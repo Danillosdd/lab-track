@@ -137,7 +137,7 @@ export default function ListarProduto({ navigation }) {
           <View style={[styles.resumoCard, styles.resumoCard3]}>
             <Ionicons name="cash-outline" size={24} color="#F5A623" style={{marginBottom: 6}} />
             <Text style={styles.resumoNumero}>
-              {valorTotal > 999 ? `${(valorTotal / 1000).toFixed(1).replace('.', ',')}k` : valorTotal.toFixed(0)}
+              {valorTotal > 999 ? `${(valorTotal / 1000).toFixed(1).replace('.', ',')}k` : valorTotal.toFixed(2).replace('.', ',')}
             </Text>
             <Text style={styles.resumoLabel}>Valor (R$)</Text>
           </View>
