@@ -7,6 +7,7 @@ import styles from './style';
 export default function Cadastro({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -73,8 +74,11 @@ export default function Cadastro({ navigation }) {
             placeholderTextColor="#5A6A85"
             value={senha}
             onChangeText={setSenha}
-            secureTextEntry
+            secureTextEntry={!mostrarSenha}
           />
+          <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)} activeOpacity={0.7} style={{ padding: 4 }}>
+            <Ionicons name={mostrarSenha ? "eye-off-outline" : "eye-outline"} size={22} color="#5A6A85" />
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity 
