@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Animated, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, Animated, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { auth, createUserWithEmailAndPassword } from '../../servicos/firebase';
 import styles from './style';
@@ -77,7 +77,8 @@ export default function Cadastro({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Animated.View style={[styles.header, { opacity: fadeAnim }]}>
         <Ionicons name="person-add-outline" size={64} color="#00B4D8" />
         <Text style={styles.title}>Criar Conta</Text>
@@ -152,6 +153,7 @@ export default function Cadastro({ navigation }) {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }

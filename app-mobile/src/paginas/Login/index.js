@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, Animated, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, Animated, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { auth, signInWithEmailAndPassword, onAuthStateChanged } from '../../servicos/firebase';
 import styles from './style';
@@ -63,7 +63,8 @@ export default function Login({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>
         <Image source={require('../../../assets/logo.png')} style={styles.logo} />
         <Text style={styles.appName}>LabTrack</Text>
@@ -138,6 +139,7 @@ export default function Login({ navigation }) {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
