@@ -52,6 +52,12 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: COLORS.accent,
   },
+  inputDisabled: {
+    backgroundColor: COLORS.card,
+    color: COLORS.accent,
+    fontWeight: '700',
+    borderColor: 'transparent',
+  },
   inputContainerIcon: {
     flexDirection: 'row',
     alignItems: 'center',

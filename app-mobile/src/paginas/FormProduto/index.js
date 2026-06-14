@@ -77,6 +77,15 @@ export default function FormProduto({ navigation, route }) {
   const [salvando, setSalvando] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const total = useMemo(() => {
+    const val = Number(valorUnitario.replace(',', '.'));
+    const qtd = Number(quantidade);
+    if (!isNaN(val) && !isNaN(qtd)) {
+      return (val * qtd).toFixed(2).replace('.', ',');
+    }
+    return '0,00';
+  }, [valorUnitario, quantidade]);
+
   const hideDatePicker = () => {
     setShowDatePicker(false);
   };
@@ -208,6 +217,16 @@ export default function FormProduto({ navigation, route }) {
           onChangeText={setQuantidade}
           keyboardType="numeric"
           placeholder="Ex: 10"
+          placeholderTextColor="#5A6A85"
+        />
+      </View>
+
+      <View style={styles.grupo}>
+        <Text style={styles.label}>Valor total (R$)</Text>
+        <TextInput
+          style={[styles.input, styles.inputDisabled]}
+          value={total}
+          editable={false}
           placeholderTextColor="#5A6A85"
         />
       </View>

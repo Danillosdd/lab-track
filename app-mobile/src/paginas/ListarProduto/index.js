@@ -193,6 +193,12 @@ export default function ListarProduto({ navigation }) {
         </View>
 
         <View style={styles.infoRow}>
+          <Ionicons name="cash-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
+          <Text style={styles.texto}>Valor total</Text>
+          <Text style={styles.textoValor}>R$ {(Number(item.valorUnitario) * Number(item.quantidade)).toFixed(2).replace('.', ',')}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
           <Ionicons name="layers-outline" size={16} color="#8899B4" style={{marginRight: 6}} />
           <Text style={styles.texto}>Estoque</Text>
           <View style={styles.estoqueContainer}>
