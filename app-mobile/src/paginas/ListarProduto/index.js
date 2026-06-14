@@ -23,7 +23,7 @@ export default function ListarProduto({ navigation }) {
       const response = await api.get('/materiais');
       setLista(response.data);
     } catch (error) {
-      Alert.alert('Ops', 'Nao consegui carregar os materiais agora.');
+      Alert.alert('Ops', 'Não consegui carregar os materiais agora.');
     } finally {
       setCarregando(false);
     }
@@ -34,15 +34,19 @@ export default function ListarProduto({ navigation }) {
       await api.delete(`/materiais/${id}`);
       carregarMateriais();
     } catch (error) {
-      Alert.alert('Ops', 'Nao consegui excluir este material.');
+      Alert.alert('Ops', 'Não consegui excluir este material.');
     }
   }
 
   function confirmarExclusao(item) {
-    Alert.alert('Confirmacao', `Deseja excluir o material ${item.descricao}?`, [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Excluir', style: 'destructive', onPress: () => excluirMaterial(item.id) },
-    ]);
+    Alert.alert(
+      'Excluir material',
+      `Tem certeza que deseja excluir "${item.descricao}"?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Excluir', style: 'destructive', onPress: () => excluirMaterial(item.id) },
+      ]
+    );
   }
 
   useFocusEffect(
@@ -54,27 +58,58 @@ export default function ListarProduto({ navigation }) {
   function renderItem({ item }) {
     return (
       <View style={styles.card}>
-        {item.imagemUrl ? <Image source={{ uri: item.imagemUrl }} style={styles.imagem} /> : null}
-        <Text style={styles.titulo}>{item.descricao}</Text>
-        <Text style={styles.texto}>Setor: {item.setor}</Text>
-        <Text style={styles.texto}>Valor unitario: R$ {Number(item.valorUnitario).toFixed(2)}</Text>
-        <Text style={styles.texto}>Quantidade: {item.quantidade}</Text>
-        <Text style={styles.texto}>Data de entrada: {item.dataEntrada}</Text>
-        <Text style={styles.texto}>Em uso: {item.emUso ? 'Sim' : 'Nao'}</Text>
+        {item.imagemUrl ? (
+          <Image source={{ uri: item.imagemUrl }} style={styles.imagem} />
+        ) : null}
+
+        <View style={styles.cardHeader}>
+          <Text style={styles.titulo} numberOfLines={1}>{item.descricao}</Text>
+          <View style={[styles.statusBadge, item.emUso ? styles.statusAtivo : styles.statusInativo]}>
+            <Text style={item.emUso ? styles.statusTextoAtivo : styles.statusTextoInativo}>
+              {item.emUso ? '● Em uso' : '○ Parado'}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.infoIcon}>📍</Text>
+          <Text style={styles.texto}>Setor</Text>
+          <Text style={styles.textoValor}>{item.setor}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.infoIcon}>💰</Text>
+          <Text style={styles.texto}>Valor unitário</Text>
+          <Text style={styles.textoValor}>R$ {Number(item.valorUnitario).toFixed(2)}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.infoIcon}>📦</Text>
+          <Text style={styles.texto}>Quantidade</Text>
+          <Text style={styles.textoValor}>{item.quantidade}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.infoIcon}>📅</Text>
+          <Text style={styles.texto}>Entrada</Text>
+          <Text style={styles.textoValor}>{item.dataEntrada}</Text>
+        </View>
+
+        <View style={styles.divider} />
 
         <View style={styles.linhaBotoes}>
           <TouchableOpacity
             style={[styles.botao, styles.botaoEditar]}
             onPress={() => navigation.navigate('AlterarMaterial', { produto: item, modo: 'alterar' })}
           >
-            <Text style={styles.textoBotao}>Alterar</Text>
+            <Text style={styles.textoBotaoEditar}>✏️  Editar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.botao, styles.botaoExcluir]}
             onPress={() => confirmarExclusao(item)}
           >
-            <Text style={styles.textoBotao}>Excluir</Text>
+            <Text style={styles.textoBotaoExcluir}>🗑️  Excluir</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -83,22 +118,43 @@ export default function ListarProduto({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerArea}>
+        <View>
+          <Text style={styles.headerTitle}>Inventário</Text>
+          <Text style={styles.headerSubtitle}>Materiais de laboratório</Text>
+        </View>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{lista.length} itens</Text>
+        </View>
+      </View>
+
       <TouchableOpacity
         style={styles.botaoNovo}
         onPress={() => navigation.navigate('IncluirMaterial', { modo: 'incluir' })}
       >
-        <Text style={styles.textoBotaoNovo}>Novo material</Text>
+        <Text style={styles.textoBotaoNovo}>＋  Novo material</Text>
       </TouchableOpacity>
 
       <FlatList
         data={lista}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={carregando} onRefresh={carregarMateriais} />
+          <RefreshControl
+            refreshing={carregando}
+            onRefresh={carregarMateriais}
+            tintColor="#00B4D8"
+            colors={['#00B4D8']}
+          />
         }
         ListEmptyComponent={
-          !carregando ? <Text style={styles.vazio}>Nenhum material cadastrado ainda.</Text> : null
+          !carregando ? (
+            <View>
+              <Text style={styles.vazioEmoji}>🧪</Text>
+              <Text style={styles.vazio}>Nenhum material cadastrado ainda.</Text>
+            </View>
+          ) : null
         }
       />
     </View>

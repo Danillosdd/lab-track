@@ -39,7 +39,7 @@ export default function FormProduto({ navigation, route }) {
     const permissao = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissao.granted) {
-      Alert.alert('Permissao', 'Permita acesso a galeria para selecionar a foto.');
+      Alert.alert('Permissão', 'Permita acesso à galeria para selecionar a foto.');
       return;
     }
 
@@ -55,7 +55,7 @@ export default function FormProduto({ navigation, route }) {
   }
 
   const tituloBotao = useMemo(
-    () => (modo === 'alterar' ? 'Salvar alteracoes' : 'Cadastrar material'),
+    () => (modo === 'alterar' ? 'Salvar alterações' : 'Cadastrar material'),
     [modo]
   );
 
@@ -76,12 +76,12 @@ export default function FormProduto({ navigation, route }) {
     };
 
     if (Number.isNaN(payload.valorUnitario) || Number.isNaN(payload.quantidade)) {
-      Alert.alert('Atenção', 'Valor unitario e quantidade precisam ser numericos.');
+      Alert.alert('Atenção', 'Valor unitário e quantidade precisam ser numéricos.');
       return;
     }
 
     if (payload.valorUnitario <= 0 || payload.quantidade < 0) {
-      Alert.alert('Atenção', 'Informe valores validos para valor unitario e quantidade.');
+      Alert.alert('Atenção', 'Informe valores válidos para valor unitário e quantidade.');
       return;
     }
 
@@ -95,7 +95,7 @@ export default function FormProduto({ navigation, route }) {
 
       navigation.goBack();
     } catch (error) {
-      Alert.alert('Ops', 'Nao foi possivel salvar o material agora.');
+      Alert.alert('Ops', 'Não foi possível salvar o material agora.');
     } finally {
       setSalvando(false);
     }
@@ -103,24 +103,41 @@ export default function FormProduto({ navigation, route }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.sectionTitle}>Informações básicas</Text>
+
       <View style={styles.grupo}>
-        <Text style={styles.label}>Descricao</Text>
-        <TextInput style={styles.input} value={descricao} onChangeText={setDescricao} />
+        <Text style={styles.label}>Descrição</Text>
+        <TextInput
+          style={styles.input}
+          value={descricao}
+          onChangeText={setDescricao}
+          placeholder="Ex: Béquer 500ml"
+          placeholderTextColor="#5A6A85"
+        />
       </View>
 
       <View style={styles.grupo}>
         <Text style={styles.label}>Setor</Text>
-        <TextInput style={styles.input} value={setor} onChangeText={setSetor} />
+        <TextInput
+          style={styles.input}
+          value={setor}
+          onChangeText={setSetor}
+          placeholder="Ex: Química Analítica"
+          placeholderTextColor="#5A6A85"
+        />
       </View>
 
+      <Text style={styles.sectionTitle}>Valores e quantidades</Text>
+
       <View style={styles.grupo}>
-        <Text style={styles.label}>Valor unitario</Text>
+        <Text style={styles.label}>Valor unitário (R$)</Text>
         <TextInput
           style={styles.input}
           value={valorUnitario}
           onChangeText={setValorUnitario}
           keyboardType="numeric"
           placeholder="Ex: 19.90"
+          placeholderTextColor="#5A6A85"
         />
       </View>
 
@@ -131,28 +148,41 @@ export default function FormProduto({ navigation, route }) {
           value={quantidade}
           onChangeText={setQuantidade}
           keyboardType="numeric"
+          placeholder="Ex: 10"
+          placeholderTextColor="#5A6A85"
         />
       </View>
 
       <View style={styles.grupo}>
-        <Text style={styles.label}>Data de entrada (AAAA-MM-DD)</Text>
+        <Text style={styles.label}>Data de entrada</Text>
         <TextInput
           style={styles.input}
           value={dataEntrada}
           onChangeText={setDataEntrada}
-          placeholder="2026-06-13"
+          placeholder="AAAA-MM-DD"
+          placeholderTextColor="#5A6A85"
         />
       </View>
 
+      <Text style={styles.sectionTitle}>Status e imagem</Text>
+
       <View style={styles.linhaSwitch}>
-        <Text style={styles.label}>Em uso</Text>
-        <Switch value={emUso} onValueChange={setEmUso} />
+        <View>
+          <Text style={styles.switchLabel}>Em uso</Text>
+          <Text style={styles.switchSublabel}>Material está sendo utilizado?</Text>
+        </View>
+        <Switch
+          value={emUso}
+          onValueChange={setEmUso}
+          trackColor={{ false: '#1E2D4A', true: '#00B4D8' + '55' }}
+          thumbColor={emUso ? '#00B4D8' : '#5A6A85'}
+        />
       </View>
 
       <View style={styles.grupo}>
         <Text style={styles.label}>Foto do material</Text>
         <TouchableOpacity style={styles.botaoImagem} onPress={selecionarImagem}>
-          <Text style={styles.textoBotaoImagem}>Selecionar imagem da galeria</Text>
+          <Text style={styles.textoBotaoImagem}>📷  Selecionar imagem da galeria</Text>
         </TouchableOpacity>
 
         {imagemUrl ? <Image source={{ uri: imagemUrl }} style={styles.previewImagem} /> : null}
